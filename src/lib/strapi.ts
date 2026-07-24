@@ -1,5 +1,5 @@
-import { Product, Testimonial, StrapiImage } from "./types";
-import { mockProducts, mockTestimonials } from "./mock-data";
+import { Product, StrapiImage } from "./types";
+import { mockProducts } from "./mock-data";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 const TOKEN = process.env.STRAPI_API_TOKEN;
@@ -86,18 +86,6 @@ function mapProduct(raw: Record<string, unknown>): Product {
   };
 }
 
-function mapTestimonial(raw: Record<string, unknown>): Testimonial {
-  const t = flatten(raw);
-  return {
-    id: (t.id as number) ?? 0,
-    name: (t.name as string) ?? "",
-    role: (t.role as string) ?? "",
-    quote: (t.quote as string) ?? "",
-    rating: Number(t.rating ?? 5),
-    avatar: normalizeImage(t.avatar as StrapiMedia),
-  };
-}
-
 export async function getProducts(): Promise<Product[]> {
   const json = await strapiFetch<StrapiList<Record<string, unknown>>>(
     "/products?populate=image&pagination[pageSize]=100"
@@ -112,12 +100,4 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   );
   if (json?.data?.length) return mapProduct(json.data[0]);
   return mockProducts.find((p) => p.slug === slug) ?? null;
-}
-
-export async function getTestimonials(): Promise<Testimonial[]> {
-  const json = await strapiFetch<StrapiList<Record<string, unknown>>>(
-    "/testimonials?populate=avatar&pagination[pageSize]=50"
-  );
-  if (!json?.data?.length) return mockTestimonials;
-  return json.data.map(mapTestimonial);
 }

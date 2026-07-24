@@ -12,7 +12,8 @@
   --color-amber: #ffb020;
   --color-line: rgba(255, 140, 40, 0.14);
   --font-sans: var(--font-manrope), system-ui, sans-serif;
-  --font-display: var(--font-luckiest-guy), var(--font-manrope), system-ui, sans-serif;
+  --font-display:
+    var(--font-luckiest-guy), var(--font-manrope), system-ui, sans-serif;
 }
 
 @layer base {
@@ -47,14 +48,6 @@
     #ff2d00 100%
   );
 }
-@utility bg-grad-red {
-  background-image: linear-gradient(
-    120deg,
-    #ff4d10 0%,
-    #c81a00 60%,
-    #7a0d00 100%
-  );
-}
 @utility text-grad {
   background-image: linear-gradient(
     135deg,
@@ -69,16 +62,6 @@
 @utility shadow-glow {
   box-shadow: 0 30px 80px -30px rgba(255, 80, 0, 0.35);
 }
-@utility hero-figure {
-  background-image:
-    radial-gradient(
-      120px 120px at 50% 46%,
-      rgba(255, 190, 60, 0.9),
-      rgba(255, 120, 20, 0.25) 60%,
-      transparent 72%
-    ),
-    linear-gradient(120deg, #ff4d10 0%, #c81a00 60%, #7a0d00 100%);
-}
 @utility product-fill {
   background-image:
     radial-gradient(
@@ -88,20 +71,6 @@
     ),
     linear-gradient(120deg, #ff4d10 0%, #c81a00 60%, #7a0d00 100%);
 }
-@utility surface-value {
-  background-image: linear-gradient(
-    135deg,
-    rgba(255, 90, 10, 0.14),
-    rgba(20, 10, 5, 0.6)
-  );
-}
-@utility surface-card {
-  background-image: linear-gradient(
-    160deg,
-    rgba(255, 90, 10, 0.08),
-    rgba(20, 10, 5, 0.7)
-  );
-}
 @utility surface-soft {
   background-image: linear-gradient(
     160deg,
@@ -109,18 +78,13 @@
     rgba(20, 10, 5, 0.7)
   );
 }
-@utility glass {
-  background-color: rgba(15, 8, 4, 0.55);
-  backdrop-filter: blur(8px);
-}
-
 @keyframes ring-bounce {
   0%,
   100% {
     transform: translate(-50%, -50%) translateY(0);
   }
   50% {
-    transform: translate(-50%, -50%) translateY(-8px);
+    transform: translate(-50%, -50%) translateY(-1px);
   }
 }
 @keyframes ring-glow {
@@ -244,6 +208,28 @@
   }
   .scroll-reveal-right {
     animation: reveal-right linear both;
+  }
+}
+
+/* ===== Silueta neón (colores originales + glow dorado en el contorno) ===== */
+@keyframes silhouette-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 3px rgba(255, 200, 100, 0.45))
+      drop-shadow(0 0 9px rgba(255, 176, 32, 0.35));
+  }
+  50% {
+    filter: drop-shadow(0 0 5px rgba(255, 200, 100, 0.6))
+      drop-shadow(0 0 15px rgba(255, 176, 32, 0.45));
+  }
+}
+@layer components {
+  .neon-glow {
+    animation: silhouette-glow 3.2s ease-in-out infinite;
+    transition: animation-duration 0.3s ease;
+  }
+  .neon-wrap:hover .neon-glow {
+    animation-duration: 1s;
   }
 }
 

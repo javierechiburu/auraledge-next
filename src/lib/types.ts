@@ -24,15 +24,6 @@ export interface Product {
   image?: StrapiImage | null;
 }
 
-export interface Testimonial {
-  id: number;
-  name: string;
-  role: string;
-  quote: string;
-  rating: number;
-  avatar?: StrapiImage | null;
-}
-
 export interface CartItem {
   slug: string;
   name: string;

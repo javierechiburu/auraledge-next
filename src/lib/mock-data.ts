@@ -1,4 +1,4 @@
-import { Product, Testimonial } from "./types";
+import { Product } from "./types";
 
 // Datos de respaldo: se usan cuando Strapi no está disponible,
 // de modo que la web funcione en desarrollo sin backend levantado.
@@ -92,62 +92,5 @@ export const mockProducts: Product[] = [
     bestValue: true,
     highlight: false,
     image: null,
-  },
-];
-
-export const mockTestimonials: Testimonial[] = [
-  {
-    id: 1,
-    name: "Sofia P.",
-    role: "Producer",
-    rating: 5,
-    quote:
-      "These are hands down the best headphones I've ever owned. The soundstage feels massive, and every detail comes through crystal clear.",
-    avatar: null,
-  },
-  {
-    id: 2,
-    name: "Kevin R.",
-    role: "Music Editor",
-    rating: 5,
-    quote:
-      "The noise cancellation is incredible. I wear them all day at the studio and the comfort never gets old. Worth every cent.",
-    avatar: null,
-  },
-  {
-    id: 3,
-    name: "Aria L.",
-    role: "DJ / Creator",
-    rating: 5,
-    quote:
-      "Battery life is unreal — I charge them once a week. The bass is deep without being muddy. Absolutely love them.",
-    avatar: null,
-  },
-  {
-    id: 4,
-    name: "Marco T.",
-    role: "Audiophile",
-    rating: 5,
-    quote:
-      "Elegant design and pure sound. AuralEdge nailed the balance between style and performance. Highly recommended.",
-    avatar: null,
-  },
-  {
-    id: 5,
-    name: "Elena V.",
-    role: "Podcaster",
-    rating: 5,
-    quote:
-      "Switching between my laptop and phone is seamless. Build quality feels premium and the fit is perfect for long sessions.",
-    avatar: null,
-  },
-  {
-    id: 6,
-    name: "James H.",
-    role: "Traveler",
-    rating: 5,
-    quote:
-      "I travel constantly and these block out everything. The clarity on calls and music is next level. A total game changer.",
-    avatar: null,
   },
 ];

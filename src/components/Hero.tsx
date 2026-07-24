@@ -1,9 +1,4 @@
-import { Product } from "@/lib/types";
-import Image from "next/image";
-import ProductMedia from "./ProductMedia";
-import AddToCartButton from "./AddToCartButton";
-
-export default function Hero({ product }: { product: Product }) {
+export default function Hero() {
   return (
     <section
       id="top"
@@ -19,18 +14,17 @@ export default function Hero({ product }: { product: Product }) {
 
       {/* Silueta central — centrada horizontalmente, anclada al borde inferior */}
       <div className="absolute inset-x-0 bottom-[130px] z-[2] flex justify-center lg:bottom-0">
-        <div className="relative h-[min(72vh,98vw,600px)] w-[min(72vh,98vw,600px)] lg:h-[min(75vh,36vw,480px)] lg:w-[min(75vh,36vw,480px)]">
-          <Image
-            src="/assets/silueta.png"
+        <div className="neon-wrap relative aspect-757/1120 h-[min(80vh,105vw,700px)] lg:h-[min(85vh,38vw,650px)]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/siluetav3.png"
             alt="Person wearing headphones with ambient glow"
-            fill
-            sizes="(max-width: 1024px) 90vw, 700px"
-            className="object-contain object-bottom"
-            priority
+            className="neon-glow absolute inset-0 h-full w-full object-cover object-center"
           />
+          <div aria-hidden="true" className="neon-sweep absolute inset-0" />
           {/* Anillo concéntrico sobre el audífono de la silueta (centro real de la imagen: ~57%, 37%) */}
-          <div className="animate-ring-bounce-glow absolute left-[70%] top-[50%] z-3 h-25 w-25 -translate-x-1/2 -translate-y-1/2 rounded-full border-8 border-amber shadow-[0_0_50px_rgba(255,180,40,.7),inset_0_0_30px_rgba(255,180,40,.4)] lg:h-32.5 lg:w-32.5 lg:border-10" />
-          <div className="animate-ring-bounce-fade absolute left-[75%] top-[55%] z-2 h-35 w-35 -translate-x-1/2 -translate-y-1/2 rounded-full border-3 border-amber/30 lg:h-45 lg:w-45" />
+          <div className="animate-ring-bounce-glow absolute left-[62%] top-[36%] lg:top-[35%] z-3 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full border-8 border-amber shadow-[0_0_50px_rgba(255,180,40,.7),inset_0_0_30px_rgba(255,180,40,.4)] lg:h-32.5 lg:w-32.5 lg:border-10" />
+          <div className="animate-ring-bounce-fade absolute left-[72%] lg:left-[68%] top-[41%] lg:top-[39%] z-2 h-30 w-30 -translate-x-1/2 -translate-y-1/2 rounded-full border-3 border-amber/30 lg:h-45 lg:w-45" />
         </div>
       </div>
 
