@@ -7,7 +7,7 @@ export default function Collection({ products }: { products: Product[] }) {
       id="collection"
       className="mx-auto max-w-[1280px] scroll-mt-24 px-6 py-[70px]"
     >
-      <div className="scroll-reveal mx-auto mb-11 max-w-[640px] text-center">
+      <div className="mx-auto mb-11 max-w-[640px] text-center">
         <h2 className="font-display mb-3.5 text-[clamp(28px,4vw,44px)] normal-case">
           Todos los <span className="text-grad">Beats</span> disponibles
         </h2>

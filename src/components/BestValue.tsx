@@ -24,7 +24,7 @@ export default function BestValue({ product: s }: { product: Product }) {
       </h2>
 
       <div className="relative p-0 z-1 md:p-8">
-        <div className="scroll-reveal-right relative overflow-hidden rounded-[32px] bg-amber p-[1.5px] shadow-[0_30px_80px_-30px_rgba(0,0,0,.8)] transition-transform duration-500 ease-out hover:scale-[1.01]">
+        <div className="relative overflow-hidden rounded-[32px] bg-amber p-[1.5px] shadow-[0_30px_80px_-30px_rgba(0,0,0,.8)] transition-transform duration-500 ease-out hover:scale-[1.01]">
           {/* Vinilo: ocupa todo el alto de la card y sangra por el borde derecho */}
           <div className="pointer-events-none absolute inset-y-0 right-20 top-10 z-10 hidden aspect-video h-full -translate-y-1/2 translate-x-1/2 md:block">
             <Image

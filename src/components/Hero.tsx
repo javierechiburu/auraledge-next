@@ -7,7 +7,7 @@ export default function Hero() {
       {/* Texto de fondo "Genio Music" con gradiente naranja→amarillo */}
       <h1
         aria-hidden="true"
-        className="font-display pointer-events-none absolute inset-x-0 top-[100px] z-[1] select-none text-center text-[clamp(80px,9vw,220px)] uppercase leading-[0.85] tracking-tight bg-[linear-gradient(180deg,#7a0d00_0%,#c81a00_40%,#ff4d10_70%,#ff7a18_100%)] bg-clip-text text-transparent"
+        className="font-clash pointer-events-none absolute inset-x-0 top-[100px] z-[1] select-none text-center text-[clamp(80px,9vw,220px)] font-semibold uppercase leading-[0.85] tracking-tight bg-[linear-gradient(180deg,#7a0d00_0%,#c81a00_40%,#ff4d10_70%,#ff7a18_100%)] bg-clip-text text-transparent"
       >
         Genio Music
       </h1>

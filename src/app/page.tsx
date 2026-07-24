@@ -4,6 +4,7 @@ import BestValue from "@/components/BestValue";
 import Collection from "@/components/Collection";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
+import ScrollReveal from "@/components/ScrollReveal";
 
 export default async function Home() {
   const products = await getProducts();
@@ -12,8 +13,12 @@ export default async function Home() {
   return (
     <main>
       <Hero />
-      <BestValue product={bestValueProduct} />
-      <Collection products={products} />
+      <ScrollReveal direction="right">
+        <BestValue product={bestValueProduct} />
+      </ScrollReveal>
+      <ScrollReveal direction="up">
+        <Collection products={products} />
+      </ScrollReveal>
       <CTA />
       <Footer />
     </main>

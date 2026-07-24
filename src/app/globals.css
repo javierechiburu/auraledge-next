@@ -1,5 +1,25 @@
 @import "tailwindcss";
 
+/* ===== Intro overlay: reveal circular animado vía custom property (evita reconstruir el gradiente en cada frame) ===== */
+@property --reveal-r {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+.intro-mask {
+  --reveal-r: 0%;
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent calc(var(--reveal-r) - 3%),
+    black var(--reveal-r)
+  );
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent calc(var(--reveal-r) - 3%),
+    black var(--reveal-r)
+  );
+}
+
 /* ===== Design tokens (generan utilidades: bg-bg, text-ink, border-line, etc.) ===== */
 @theme {
   --color-bg: #0a0705;
@@ -14,6 +34,8 @@
   --font-sans: var(--font-manrope), system-ui, sans-serif;
   --font-display:
     var(--font-luckiest-guy), var(--font-manrope), system-ui, sans-serif;
+  --font-clash: var(--font-clash-display), var(--font-manrope), system-ui,
+    sans-serif;
 }
 
 @layer base {
