@@ -6,13 +6,14 @@ export default function CTA() {
       <div className="scroll-reveal grid overflow-hidden rounded-[28px] bg-[linear-gradient(to_left,#000_0%,#7a0d00_75%,#c81a00_100%)] shadow-glow lg:grid-cols-[1.1fr_1fr]">
         <div className="p-[46px] lg:px-[46px] lg:py-[54px]">
           <h2 className="mb-4 text-[clamp(28px,3.6vw,42px)] font-extrabold leading-[1.1]">
-            Hear Every Detail.
+            Encuentra Tu Próximo Hit.
             <br />
-            Feel Every Beat.
+            Siente Cada Beat.
           </h2>
           <p className="mb-[26px] max-w-[400px] text-[15px] text-[rgba(255,240,230,.85)]">
-            Step into a new dimension of sound — where clarity meets emotion,
-            and innovation meets design.
+            Explora una colección de pistas y beats originales — donde la
+            creatividad se encuentra con el ritmo, listos para tu próxima
+            producción.
           </p>
           <a href="#collection" className="btn btn-dark">
             Explorar colección <span className="btn-ic">↗</span>

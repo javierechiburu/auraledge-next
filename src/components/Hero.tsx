@@ -18,8 +18,8 @@ export default function Hero({ product }: { product: Product }) {
       </h1>
 
       {/* Silueta central — centrada horizontalmente, anclada al borde inferior */}
-      <div className="absolute inset-x-0 bottom-0 z-[2] flex justify-center">
-        <div className="relative h-[min(65vh,60vw,420px)] w-[min(65vh,60vw,420px)] lg:h-[min(75vh,36vw,480px)] lg:w-[min(75vh,36vw,480px)]">
+      <div className="absolute inset-x-0 bottom-[130px] z-[2] flex justify-center lg:bottom-0">
+        <div className="relative h-[min(72vh,98vw,600px)] w-[min(72vh,98vw,600px)] lg:h-[min(75vh,36vw,480px)] lg:w-[min(75vh,36vw,480px)]">
           <Image
             src="/assets/silueta.png"
             alt="Person wearing headphones with ambient glow"
@@ -35,9 +35,9 @@ export default function Hero({ product }: { product: Product }) {
       </div>
 
       {/* Cards superpuestas — posicionadas absolutamente sobre la silueta */}
-      <div className="absolute inset-x-0 bottom-0 z-[4] mx-auto max-w-[1280px] px-6 pb-6 lg:pb-10">
+      <div className="absolute inset-x-0 bottom-0 z-[4] mx-auto max-w-[1280px] px-0  md:px-6 pb-6 lg:pb-10">
         {/* Bottom bar: rating + explore + customers */}
-        <div className="my-5 flex flex-wrap items-center justify-between gap-4">
+        <div className="my-7 flex flex-wrap items-center justify-between gap-4">
           {/* Rating */}
           <div className="flex items-center gap-3">
             <span className="text-[28px] font-extrabold">5.0</span>
@@ -57,7 +57,7 @@ export default function Hero({ product }: { product: Product }) {
           {/* Explore Collection */}
           <a
             href="#collection"
-            className="absolute bottom-0 flex items-center justify-center w-full bg-black px-6 py-3 text-sm font-semibold"
+            className="absolute bottom-0 flex items-center justify-center w-full bg-black py-3 text-sm font-semibold"
           >
             Explorar colección ↗
           </a>

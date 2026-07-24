@@ -17,13 +17,13 @@ export default function BestValue({ product: s }: { product: Product }) {
   return (
     <section
       id="feature"
-      className="mx-auto max-w-[1280px] scroll-mt-24 px-6 py-[70px]"
+      className="mx-auto max-w-[1280px] scroll-mt-24 px-6 py-10 md:py-17.5"
     >
-      <h2 className="font-display relative z-0 mb-[-40px] text-center text-[clamp(48px,9vw,120px)] tracking-[2px] text-[rgba(255,176,32,.1)]">
+      <h2 className="font-display relative z-0 mb-[-20px] text-center text-[clamp(48px,9vw,120px)] tracking-[2px] text-[rgba(255,176,32,.1)]">
         ÚLTIMO BEAT
       </h2>
 
-      <div className="relative z-1 p-6 md:p-8">
+      <div className="relative p-0 z-1 md:p-8">
         <div className="scroll-reveal-right relative overflow-hidden rounded-[32px] bg-amber p-[1.5px] shadow-[0_30px_80px_-30px_rgba(0,0,0,.8)] transition-transform duration-500 ease-out hover:scale-[1.01]">
           {/* Vinilo: ocupa todo el alto de la card y sangra por el borde derecho */}
           <div className="pointer-events-none absolute inset-y-0 right-20 top-10 z-10 hidden aspect-video h-full -translate-y-1/2 translate-x-1/2 md:block">
@@ -71,17 +71,17 @@ export default function BestValue({ product: s }: { product: Product }) {
             </button>
           </div>
 
-          <div className="relative overflow-hidden rounded-[31px]  p-8 md:p-12">
+          <div className="relative overflow-hidden rounded-[31px] p-6 pb-38 md:p-12">
             {/* Resplandores decorativos */}
 
-            <div className="relative flex flex-col items-center justify-between gap-10 md:flex-row">
+            <div className="relative z-10 flex flex-col items-center justify-between gap-10 md:flex-row">
               {/* Izquierda */}
               <div className="max-w-md text-center md:text-left">
                 <span className="inline-block rounded-full bg-grad px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-[#1a0a00]">
                   {s.badge || "Best Value"}
                 </span>
 
-                <div className="mt-4 flex flex-wrap items-center justify-center gap-3 md:justify-start">
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-3 2xl:justify-start">
                   <h3 className="font-display text-4xl leading-tight text-white md:text-5xl">
                     {s.name}
                   </h3>
@@ -100,7 +100,7 @@ export default function BestValue({ product: s }: { product: Product }) {
                   </div>
                 </div>
                 {/* Precio */}
-                <div className="mt-8 flex items-center justify-center gap-4 md:justify-start">
+                <div className="mt-0 flex items-center justify-center gap-4 md:mt-8 2xl:justify-start">
                   <span className="text-4xl font-bold text-white">
                     ${dollars}
                     <sup className="text-lg text-amber">.{cents}</sup>
@@ -111,69 +111,67 @@ export default function BestValue({ product: s }: { product: Product }) {
                 </div>
 
                 {/* Botones */}
-                <div className="mt-8 flex justify-center gap-4 md:justify-start">
+                <div className="mt-0 flex flex-col gap-3 md:mt-8 md:flex-row md:gap-4 md:justify-start">
                   <AddToCartButton
                     product={s}
                     label="Agregar al carrito"
-                    className="rounded-xl border border-white/15 bg-white/5 px-6 py-3 font-semibold text-white backdrop-blur transition hover:bg-white/10"
+                    className="w-full rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-center font-semibold text-white backdrop-blur transition hover:bg-white/10 md:w-auto"
                   />
                   <Link
                     href={`/products/${s.slug}`}
-                    className="rounded-xl bg-grad px-6 py-3 font-semibold text-[#1a0a00] transition hover:scale-105 hover:brightness-110"
+                    className="w-full rounded-xl bg-grad px-6 py-3 text-center font-semibold text-[#1a0a00] transition hover:scale-105 hover:brightness-110 md:w-auto"
                   >
                     Comprar ahora
                   </Link>
                 </div>
               </div>
+            </div>
 
-              {/* Vinilo (compacto, solo móvil; en desktop se usa el vinilo que sangra por el borde) */}
-              <div className="relative shrink-0 md:hidden">
-                <div className="relative h-64 w-64">
-                  <Image
-                    src="/assets/vinilo.png"
-                    alt={s.name}
-                    fill
-                    sizes="820px"
-                    style={{
-                      animationPlayState: isPlaying ? "running" : "paused",
-                    }}
-                    className="absolute animate-spin-slow object-contain w-75"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setIsPlaying((p) => !p)}
-                    aria-label={isPlaying ? "Pause preview" : "Play preview"}
-                    aria-pressed={isPlaying}
-                    className="absolute inset-0 grid cursor-pointer place-items-center"
-                  >
-                    <div
-                      className={`grid h-16 w-16 place-items-center rounded-full bg-grad transition-transform duration-200 hover:scale-105 active:scale-95 ${
-                        isPlaying
-                          ? "animate-neon-pulse"
-                          : "shadow-[0_0_14px_2px_rgba(255,176,32,.4)]"
-                      }`}
+            {/* Vinilo (solo móvil): absolute y sangrando por el borde inferior de la card */}
+            <div className="absolute bottom-0 left-1/2 z-0 h-[64vw] w-[64vw] max-h-64 max-w-64 -translate-x-1/2 translate-y-1/2 md:hidden">
+              <Image
+                src="/assets/vinilo.png"
+                alt={s.name}
+                fill
+                sizes="480px"
+                style={{
+                  animationPlayState: isPlaying ? "running" : "paused",
+                }}
+                className="animate-spin-slow object-contain"
+              />
+              <button
+                type="button"
+                onClick={() => setIsPlaying((p) => !p)}
+                aria-label={isPlaying ? "Pause preview" : "Play preview"}
+                aria-pressed={isPlaying}
+                className="absolute inset-0 grid cursor-pointer place-items-center"
+              >
+                <div
+                  className={`grid h-16 w-16 place-items-center rounded-full bg-grad transition-transform duration-200 hover:scale-105 active:scale-95 ${
+                    isPlaying
+                      ? "animate-neon-pulse"
+                      : "shadow-[0_0_14px_2px_rgba(255,176,32,.4)]"
+                  }`}
+                >
+                  {isPlaying ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 fill-[#1a0a00]"
+                      viewBox="0 0 24 24"
                     >
-                      {isPlaying ? (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6 fill-[#1a0a00]"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
-                        </svg>
-                      ) : (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6 fill-[#1a0a00]"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      )}
-                    </div>
-                  </button>
+                      <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 fill-[#1a0a00]"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  )}
                 </div>
-              </div>
+              </button>
             </div>
           </div>
         </div>
