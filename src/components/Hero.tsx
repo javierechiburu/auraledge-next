@@ -23,8 +23,7 @@ export default function Hero() {
           />
           <div aria-hidden="true" className="neon-sweep absolute inset-0" />
           {/* Anillo concéntrico sobre el audífono de la silueta (centro real de la imagen: ~57%, 37%) */}
-          <div className="animate-ring-bounce-glow absolute left-[62%] top-[36%] lg:top-[35%] z-3 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full border-8 border-amber shadow-[0_0_50px_rgba(255,180,40,.7),inset_0_0_30px_rgba(255,180,40,.4)] lg:h-32.5 lg:w-32.5 lg:border-10" />
-          <div className="animate-ring-bounce-fade absolute left-[72%] lg:left-[68%] top-[41%] lg:top-[39%] z-2 h-30 w-30 -translate-x-1/2 -translate-y-1/2 rounded-full border-3 border-amber/30 lg:h-45 lg:w-45" />
+          <div className=" animate-ring-bounce-glow absolute left-[72%] lg:left-[65%] top-[41%] lg:top-[37%] z-2 h-30 w-30 -translate-x-1/2 -translate-y-1/2 rounded-full border-3 border-amber/80 lg:h-40 lg:w-40" />
         </div>
       </div>
 
