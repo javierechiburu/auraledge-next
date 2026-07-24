@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx --yes playwright --version)",
+      "Bash(npx playwright *)",
+      "Bash(node -e \"require\\('playwright'\\)\")",
+      "Bash(node --experimental-vm-modules shot.mjs)",
+      "Bash(npm init *)",
+      "Bash(node shot.mjs)"
+    ]
+  }
+}

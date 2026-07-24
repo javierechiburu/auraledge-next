@@ -4,7 +4,7 @@ import { Testimonial } from "@/lib/types";
 export default function Testimonials({ items }: { items: Testimonial[] }) {
   return (
     <section id="testimonials" className="mx-auto max-w-[1280px] scroll-mt-24 px-6 py-[70px]">
-      <div className="mx-auto mb-11 max-w-[640px] text-center">
+      <div className="scroll-reveal mx-auto mb-11 max-w-[640px] text-center">
         <h2 className="mb-3.5 text-[clamp(28px,4vw,44px)] font-extrabold">
           Loved by <span className="text-grad">Thousands</span>
         </h2>
@@ -16,7 +16,10 @@ export default function Testimonials({ items }: { items: Testimonial[] }) {
 
       <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
         {items.map((t) => (
-          <article key={t.id} className="rounded-[22px] border border-line surface-soft p-[26px]">
+          <article
+            key={t.id}
+            className="scroll-reveal-left rounded-[22px] border border-line surface-soft p-[26px]"
+          >
             <div className="mb-3.5 text-sm tracking-[2px] text-amber">
               {"★".repeat(Math.round(t.rating || 5))}
             </div>

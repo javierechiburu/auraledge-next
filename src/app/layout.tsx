@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
-import "./globals.css";
+import { Manrope, Luckiest_Guy } from "next/font/google";
 import { CartProvider } from "@/context/CartContext";
 import Navbar from "@/components/Navbar";
 import CartDrawer from "@/components/CartDrawer";
+import "./globals.css";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -12,15 +12,25 @@ const manrope = Manrope({
   display: "swap",
 });
 
+const luckiestGuy = Luckiest_Guy({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-luckiest-guy",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "AuralEdge — Experience Sound Without Limits",
-  description:
-    "Premium wireless headphones engineered for pure, limitless audio. Shop the AuralEdge collection.",
+  title: "Genio Music",
+  description: "Venta de beats premium.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className={manrope.variable}>
+    <html lang="en" className={`${manrope.variable} ${luckiestGuy.variable}`}>
       <body>
         <CartProvider>
           <Navbar />

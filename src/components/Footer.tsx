@@ -22,14 +22,17 @@ const COLS = [
 export default function Footer() {
   return (
     <footer className="border-t border-line bg-[linear-gradient(180deg,transparent,rgba(20,10,5,.8))]">
-      <div className="mx-auto grid max-w-[1280px] gap-10 px-6 pb-10 pt-[60px] sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1.4fr]">
+      <div className="scroll-reveal mx-auto grid max-w-[1280px] gap-10 px-6 pb-10 pt-[60px] sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1.4fr]">
         <div>
-          <a href="#top" className="flex items-center gap-2 text-[19px] font-extrabold tracking-wide">
-            <span className="text-xl text-brand">◎</span> AURALEDGE
+          <a
+            href="#top"
+            className="flex items-center gap-2 text-[19px] font-extrabold tracking-wide"
+          >
+            <span className="text-xl text-brand">◎</span> GENIOMUSIC
           </a>
           <p className="mt-3.5 max-w-[300px] text-[13.5px] leading-[1.6] text-muted">
-            Experience sound without limits. Premium wireless headphones engineered for pure,
-            limitless audio.
+            Experience sound without limits. Premium wireless headphones
+            engineered for pure, limitless audio.
           </p>
         </div>
 
@@ -50,7 +53,9 @@ export default function Footer() {
 
         <div>
           <h4 className="mb-4 text-[15px] font-semibold">Newsletter</h4>
-          <p className="text-[13.5px] leading-[1.6] text-muted">Get the latest drops and offers.</p>
+          <p className="text-[13.5px] leading-[1.6] text-muted">
+            Get the latest drops and offers.
+          </p>
           <div className="mt-3.5 flex gap-2">
             <input
               type="email"
@@ -63,7 +68,7 @@ export default function Footer() {
       </div>
 
       <div className="mx-auto flex max-w-[1280px] flex-wrap justify-between gap-2.5 border-t border-line px-6 py-5 text-[12.5px] text-muted">
-        <span>© 2026 AuralEdge. All rights reserved.</span>
+        <span>© 2026 Genio Music. All rights reserved.</span>
         <span>Privacy · Terms · Cookies</span>
       </div>
     </footer>

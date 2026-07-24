@@ -1,93 +1,59 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 
 const LINKS = [
-  { href: "#top", label: "Home" },
-  { href: "#feature", label: "Feature" },
-  { href: "#highlight", label: "Highlight Product" },
-  { href: "#collection", label: "Collection" },
-  { href: "#testimonials", label: "Testimonials" },
+  { href: "#top", label: "Inicio" },
+  { href: "#collection", label: "Beats" },
 ];
 
 export default function Navbar() {
   const { count, openCart } = useCart();
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState("top");
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const ids = LINKS.map((l) => l.href.slice(1));
-    const onScroll = () => {
-      setScrolled(window.scrollY > 20);
-      let cur = "top";
-      for (const id of ids) {
-        const el = document.getElementById(id);
-        if (el && window.scrollY >= el.offsetTop - 120) cur = id;
-      }
-      setActive(cur);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled
-          ? "border-b border-line bg-black/95 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent"
-      }`}
-    >
-      <div className="mx-auto flex max-w-[1280px] items-center gap-6 px-6 py-4">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-white/6 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.5)] backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl items-center gap-6 px-6 py-4">
         <a
           href="#top"
-          className="flex items-center gap-2 text-[19px] font-extrabold tracking-wide"
+          className="font-display flex items-center gap-2 text-[17px] tracking-wide"
         >
           <Image
-            src="/assets/logo.jpg"
-            alt="AURALEDGE logo"
-            width={30}
-            height={30}
-            className="rounded-full"
+            src="/assets/logo-bg.png"
+            alt="GENIOMUSIC logo"
+            width={28}
+            height={28}
+            className="rounded-full ring-1 ring-white/15"
           />
-          AURALEDGE
+          GENIOMUSIC
         </a>
 
         <nav
           className={`${
             open
-              ? "absolute inset-x-0 top-full flex flex-col gap-4 border-b border-line bg-card p-6"
+              ? "absolute inset-x-0 top-full mt-2 flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/6 p-3 backdrop-blur-xl"
               : "hidden"
-          } lg:ml-3.5 lg:flex lg:flex-1 lg:flex-row lg:items-center lg:gap-6 lg:border-0 lg:bg-transparent lg:p-0`}
+          } lg:ml-2 lg:flex lg:flex-1 lg:flex-row lg:items-center lg:gap-2 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none`}
         >
-          {LINKS.map((l) => {
-            const isActive = active === l.href.slice(1);
-            return (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className={`relative text-[14.5px] font-medium transition-colors ${
-                  isActive
-                    ? "text-ink after:absolute after:-bottom-2 after:left-0 after:right-0 after:h-0.5 after:rounded after:bg-grad"
-                    : "text-muted hover:text-ink"
-                }`}
-              >
-                {l.label}
-              </a>
-            );
-          })}
+          {LINKS.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              onClick={() => setOpen(false)}
+              className="rounded-full border border-transparent px-3.5 py-1.5 text-[14.5px] font-medium text-muted transition-colors hover:border-white/10 hover:bg-white/6 hover:text-ink"
+            >
+              {l.label}
+            </a>
+          ))}
         </nav>
 
         <div className="ml-auto flex items-center gap-3 lg:ml-0">
           <button
             onClick={openCart}
             aria-label="cart"
-            className="relative rounded-xl border border-line bg-panel px-3.5 py-2.5 text-base"
+            className="relative rounded-xl border border-white/10 bg-white/6 px-3.5 py-2 text-base backdrop-blur-xl transition-colors hover:bg-white/10"
           >
             🛒
             {count > 0 && (
@@ -100,7 +66,7 @@ export default function Navbar() {
           <button
             onClick={() => setOpen((o) => !o)}
             aria-label="menu"
-            className="rounded-lg border border-line px-3 py-1.5 text-xl lg:hidden"
+            className="rounded-lg border border-white/10 bg-white/6 px-3 py-1.5 text-xl backdrop-blur-xl lg:hidden"
           >
             ☰
           </button>

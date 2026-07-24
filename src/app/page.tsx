@@ -8,18 +8,19 @@ import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 
 export default async function Home() {
-  const [products, testimonials] = await Promise.all([getProducts(), getTestimonials()]);
+  const [products, testimonials] = await Promise.all([
+    getProducts(),
+    getTestimonials(),
+  ]);
 
   const heroProduct = products.find((p) => p.highlight) ?? products[0];
-  const bestValue = products.filter((p) => p.bestValue);
+  const bestValueProduct = products.find((p) => p.bestValue) ?? products[0];
 
   return (
     <main>
       <Hero product={heroProduct} />
-      <BestValue products={bestValue.length ? bestValue : products} />
-      <Highlight product={heroProduct} />
+      <BestValue product={bestValueProduct} />
       <Collection products={products} />
-      <Testimonials items={testimonials} />
       <CTA />
       <Footer />
     </main>
