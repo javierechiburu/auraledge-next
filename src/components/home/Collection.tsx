@@ -1,5 +1,5 @@
 import { Product } from "@/lib/types";
-import ProductCard from "./ProductCard";
+import ProductCard from "@/components/beats/ProductCard";
 
 export default function Collection({ products }: { products: Product[] }) {
   return (

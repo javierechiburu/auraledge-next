@@ -6,14 +6,14 @@ import Link from "next/link";
 import { Play, Pause, SkipBack, SkipForward, Star } from "lucide-react";
 import { Product } from "@/lib/types";
 import { WAVEFORM } from "@/lib/waveform";
-import AddToCartButton from "./AddToCartButton";
+import AddToCartButton from "@/components/shared/AddToCartButton";
 
 export default function ProductCard({ product: p }: { product: Product }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const rating = 4;
 
   return (
-    <article className="scroll-reveal group relative overflow-hidden rounded-[28px] border-[5px] border-card bg-gradient-to-br from-panel to-black shadow-2xl transition duration-300 hover:-translate-y-1.5">
+    <article className="scroll-reveal group relative overflow-hidden rounded-[28px] border-2 border-amber/50 bg-black shadow-2xl transition duration-300 hover:-translate-y-1.5 hover:border-amber">
       {/* Precio */}
       <div className="absolute right-0 top-0 z-20 rounded-bl-2xl bg-grad px-4 py-2 text-lg font-bold text-[#1a0a00]">
         ${Math.round(p.price)}
@@ -27,8 +27,9 @@ export default function ProductCard({ product: p }: { product: Product }) {
             alt={p.name}
             fill
             sizes="(max-width:768px) 80vw, 320px"
-            className="object-cover brightness-75"
+            className="object-cover brightness-75 saturate-50"
           />
+          {/* Atenúa el rojizo de la foto base hacia negro/ámbar sin tocar el asset */}
 
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 px-3 text-center">
             <div className="flex h-3.5 items-end gap-0.5">
@@ -40,7 +41,7 @@ export default function ProductCard({ product: p }: { product: Product }) {
                     animationDelay: `${(i % 8) * 0.09}s`,
                     animationPlayState: isPlaying ? "running" : "paused",
                   }}
-                  className="animate-bar-bounce w-[2px] origin-bottom rounded-full bg-amber/80"
+                  className="animate-bar-bounce w-0.5 origin-bottom rounded-full bg-amber/80"
                 />
               ))}
             </div>

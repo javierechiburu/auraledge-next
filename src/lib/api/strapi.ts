@@ -1,5 +1,5 @@
-import { Product, StrapiImage } from "./types";
-import { mockProducts } from "./mock-data";
+import { CartItem, Customer, Order, Product, StrapiImage } from "../types";
+import { mockProducts } from "../mock-data";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 const TOKEN = process.env.STRAPI_API_TOKEN;
@@ -100,4 +100,65 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   );
   if (json?.data?.length) return mapProduct(json.data[0]);
   return mockProducts.find((p) => p.slug === slug) ?? null;
+}
+
+/**
+ * Crea una orden en Strapi (content-type "Order", ver STRAPI.md).
+ * Si Strapi no responde (o el content-type todavía no existe), no bloquea el
+ * checkout: genera un id local y deja seguir el flujo de pago igualmente.
+ */
+export async function createOrder(items: CartItem[], customer: Customer): Promise<Order> {
+  const total = items.reduce((n, i) => n + i.qty * i.price, 0);
+
+  try {
+    const res = await fetch(`${STRAPI_URL}/api/orders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
+      },
+      body: JSON.stringify({ data: { items, customer, total, status: "pending" } }),
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = (await res.json()) as { data: Record<string, unknown> };
+      const created = flatten(json.data);
+      return {
+        id: String(created.id ?? created.documentId ?? crypto.randomUUID()),
+        items,
+        customer,
+        total,
+        status: "pending",
+      };
+    }
+  } catch {
+    // Strapi no disponible → seguimos con un id local, ver docstring.
+  }
+
+  console.warn("[strapi] No se pudo crear la orden en Strapi, usando id local.");
+  return { id: `local-${crypto.randomUUID()}`, items, customer, total, status: "pending" };
+}
+
+/** Actualiza el estado de una orden en Strapi (usado por el webhook de Mercado Pago). */
+export async function updateOrder(
+  orderId: string,
+  patch: Partial<Pick<Order, "status" | "mpPreferenceId" | "mpPaymentId">>
+): Promise<void> {
+  if (orderId.startsWith("local-")) {
+    console.warn(`[strapi] Orden local ${orderId}, no hay nada que actualizar en Strapi.`);
+    return;
+  }
+  try {
+    await fetch(`${STRAPI_URL}/api/orders/${orderId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
+      },
+      body: JSON.stringify({ data: patch }),
+      cache: "no-store",
+    });
+  } catch {
+    console.warn(`[strapi] No se pudo actualizar la orden ${orderId} en Strapi.`);
+  }
 }

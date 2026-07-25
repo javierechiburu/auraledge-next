@@ -1,7 +1,7 @@
 const SITE_LINKS = [
-  { label: "Inicio", href: "#top" },
-  { label: "Colección", href: "#collection" },
-  { label: "Último Beat", href: "#feature" },
+  { label: "Inicio", href: "/#top" },
+  { label: "Beats", href: "/beats" },
+  { label: "Último Beat", href: "/#feature" },
 ];
 
 const SOCIAL_LINKS = [

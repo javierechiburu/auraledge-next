@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Manrope, Luckiest_Guy } from "next/font/google";
 import localFont from "next/font/local";
 import { CartProvider } from "@/context/CartContext";
-import Navbar from "@/components/Navbar";
-import CartDrawer from "@/components/CartDrawer";
-import IntroOverlay from "@/components/IntroOverlay";
+import Navbar from "@/components/global/Navbar";
+import CartDrawer from "@/components/global/CartDrawer";
+import IntroOverlay from "@/components/global/IntroOverlay";
 import "./globals.css";
 
 const manrope = Manrope({

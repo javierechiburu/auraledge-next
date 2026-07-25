@@ -14,6 +14,9 @@ importers:
       lucide-react:
         specifier: ^1.26.0
         version: 1.26.0(react@19.0.0)
+      mercadopago:
+        specifier: ^3.2.1
+        version: 3.2.1
       next:
         specifier: ^15.5.21
         version: 15.5.21(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -505,6 +508,10 @@ packages:
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
+  mercadopago@3.2.1:
+    resolution: {integrity: sha512-CFKq5H4XCL8xiLcsFbW84uGZPYnIpE2IRWlDGSHLQf3rszSiHRleWrrg7KG486B46GpJ0gzhvGMdWVwsNKTvFg==}
+    engines: {node: '>=18'}
+
   nanoid@3.3.16:
     resolution: {integrity: sha512-bzlKTyNJ7+LdGIIwy8ijFpIqEQIvafahV7eYykJ8Cvh42EdJeODoJ6gUJXpQJvej1BddH8OqTXZNE/KfbWAu8Q==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -916,6 +923,8 @@ snapshots:
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  mercadopago@3.2.1: {}
 
   nanoid@3.3.16: {}
 

@@ -1,10 +1,10 @@
-import { getProducts } from "@/lib/strapi";
-import Hero from "@/components/Hero";
-import BestValue from "@/components/BestValue";
-import Collection from "@/components/Collection";
-import CTA from "@/components/CTA";
-import Footer from "@/components/Footer";
-import ScrollReveal from "@/components/ScrollReveal";
+import { getProducts } from "@/lib/api/strapi";
+import Hero from "@/components/home/Hero";
+import BestValue from "@/components/home/BestValue";
+import Collection from "@/components/home/Collection";
+import CTA from "@/components/home/CTA";
+import Footer from "@/components/global/Footer";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 
 export default async function Home() {
   const products = await getProducts();

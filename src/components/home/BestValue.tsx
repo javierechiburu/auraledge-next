@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/lib/types";
 import { WAVEFORM } from "@/lib/waveform";
-import AddToCartButton from "./AddToCartButton";
+import AddToCartButton from "@/components/shared/AddToCartButton";
 
 export default function BestValue({ product: s }: { product: Product }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -118,7 +118,7 @@ export default function BestValue({ product: s }: { product: Product }) {
                     className="w-full rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-center font-semibold text-white backdrop-blur transition hover:bg-white/10 md:w-auto"
                   />
                   <Link
-                    href={`/products/${s.slug}`}
+                    href={`/beats/${s.slug}`}
                     className="w-full rounded-xl bg-grad px-6 py-3 text-center font-semibold text-[#1a0a00] transition hover:scale-105 hover:brightness-110 md:w-auto"
                   >
                     Comprar ahora

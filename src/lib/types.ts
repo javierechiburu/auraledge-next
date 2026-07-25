@@ -31,3 +31,31 @@ export interface CartItem {
   image?: string | null;
   qty: number;
 }
+
+export interface Customer {
+  name: string;
+  email: string;
+  phone?: string;
+}
+
+export type OrderStatus = "pending" | "approved" | "rejected" | "cancelled";
+
+export interface Order {
+  id: string;
+  items: CartItem[];
+  customer: Customer;
+  total: number;
+  status: OrderStatus;
+  mpPreferenceId?: string | null;
+  mpPaymentId?: string | null;
+}
+
+export interface CheckoutPayload {
+  items: CartItem[];
+  customer: Customer;
+}
+
+export interface MPPreferenceResponse {
+  orderId: string;
+  init_point: string;
+}

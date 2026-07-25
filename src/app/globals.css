@@ -63,35 +63,22 @@
 
 /* ===== Utilidades personalizadas (degradados / superficies) ===== */
 @utility bg-grad {
-  background-image: linear-gradient(
-    135deg,
-    #ff9a1f 0%,
-    #ff5a12 45%,
-    #ff2d00 100%
-  );
+  background-color: var(--color-amber-500);
 }
 @utility text-grad {
-  background-image: linear-gradient(
-    135deg,
-    #ff9a1f 0%,
-    #ff5a12 45%,
-    #ff2d00 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--color-amber-500);
 }
 @utility shadow-glow {
-  box-shadow: 0 30px 80px -30px rgba(255, 80, 0, 0.35);
+  box-shadow: 0 30px 80px -30px rgba(245, 158, 11, 0.35);
 }
 @utility product-fill {
   background-image:
     radial-gradient(
       100px 100px at 55% 45%,
-      rgba(255, 190, 60, 0.5),
+      rgba(255, 176, 32, 0.35),
       transparent 62%
     ),
-    linear-gradient(120deg, #ff4d10 0%, #c81a00 60%, #7a0d00 100%);
+    linear-gradient(120deg, #1a1006 0%, #0e0805 60%, #050302 100%);
 }
 @utility surface-soft {
   background-image: linear-gradient(
@@ -264,13 +251,13 @@
     @apply inline-grid place-items-center w-[26px] h-[26px] rounded-lg bg-black/25 text-[13px];
   }
   .btn-primary {
-    @apply bg-grad text-[#1a0a00] shadow-[0_10px_30px_-8px_rgba(255,90,0,.6)] hover:-translate-y-0.5 hover:brightness-110;
+    @apply bg-amber-500 text-[#1a0a00] shadow-[0_10px_30px_-8px_rgba(245,158,11,.55)] hover:-translate-y-0.5 hover:bg-amber-400;
   }
   .btn-dark {
-    @apply bg-[#140a05] text-ink border border-line hover:bg-[#1d0f07];
+    @apply bg-[#140a05] text-ink border border-amber-500 hover:bg-[#1d0f07];
   }
   .btn-outline {
-    @apply bg-transparent text-ink border border-line px-[30px] py-[13px] rounded-xl hover:border-brand hover:text-brand;
+    @apply bg-transparent text-ink border border-amber-500 px-[30px] py-[13px] rounded-xl hover:bg-amber-500 hover:text-[#1a0a00];
   }
   .btn-sm {
     @apply px-5 py-[11px] text-sm;

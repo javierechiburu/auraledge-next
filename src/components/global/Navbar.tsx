@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 
 const LINKS = [
-  { href: "#top", label: "Inicio" },
-  { href: "#collection", label: "Beats" },
+  { href: "/#top", label: "Inicio" },
+  { href: "/beats", label: "Beats" },
 ];
 
 export default function Navbar() {
@@ -16,8 +17,8 @@ export default function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-white/6 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.5)] backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center gap-6 px-6 py-4">
-        <a
-          href="#top"
+        <Link
+          href="/#top"
           className="font-display flex items-center gap-2 text-[17px] tracking-wide"
         >
           <Image
@@ -25,10 +26,10 @@ export default function Navbar() {
             alt="GENIOMUSIC logo"
             width={28}
             height={28}
-            className="rounded-full ring-1 ring-white/15"
+            className="rounded-full"
           />
           GENIOMUSIC
-        </a>
+        </Link>
 
         <nav
           className={`${
@@ -38,14 +39,14 @@ export default function Navbar() {
           } lg:ml-2 lg:flex lg:flex-1 lg:flex-row lg:items-center lg:gap-2 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none`}
         >
           {LINKS.map((l) => (
-            <a
+            <Link
               key={l.href}
               href={l.href}
               onClick={() => setOpen(false)}
               className="rounded-full border border-transparent px-3.5 py-1.5 text-[14.5px] font-medium text-muted transition-colors hover:border-white/10 hover:bg-white/6 hover:text-ink"
             >
               {l.label}
-            </a>
+            </Link>
           ))}
         </nav>
 

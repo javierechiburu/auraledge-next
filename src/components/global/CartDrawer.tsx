@@ -1,48 +1,59 @@
 "use client";
 
+import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 
 export default function CartDrawer() {
-  const { items, isOpen, closeCart, setQty, removeItem, total, count } = useCart();
+  const { items, isOpen, closeCart, setQty, removeItem, total, count } =
+    useCart();
 
   return (
     <>
       <div
         onClick={closeCart}
-        className={`fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm transition-opacity duration-200 ${
+        className={`fixed inset-0 z-90 bg-black/60 backdrop-blur-sm transition-opacity duration-200 ${
           isOpen ? "visible opacity-100" : "invisible opacity-0"
         }`}
       />
       <aside
         aria-hidden={!isOpen}
-        className={`fixed right-0 top-0 z-[100] flex h-full w-[min(400px,92vw)] flex-col border-l border-line bg-card transition-transform duration-300 ${
+        className={`fixed right-0 top-0 z-100 flex h-full w-[min(400px,92vw)] flex-col border-l border-line bg-black transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between border-b border-line p-[22px]">
-          <h3 className="text-[18px] font-bold">Your Cart ({count})</h3>
-          <button onClick={closeCart} aria-label="close" className="text-[22px]">
+        <div className="flex items-center justify-between border-b border-line p-5.5">
+          <h3 className="text-[18px] font-bold">Mi Carrito ({count})</h3>
+          <button
+            onClick={closeCart}
+            aria-label="close"
+            className="text-[22px]"
+          >
             ✕
           </button>
         </div>
 
-        <div className="flex flex-1 flex-col gap-3.5 overflow-y-auto p-[18px_22px]">
+        <div className="flex flex-1 flex-col gap-1 overflow-y-auto px-[22px]">
           {items.length === 0 ? (
             <p className="mt-10 text-center text-muted">Your cart is empty.</p>
           ) : (
             items.map((it) => (
-              <div key={it.slug} className="flex items-center gap-3 rounded-2xl border border-line p-3">
+              <div key={it.slug} className="flex items-center gap-4 py-5">
                 <div
-                  className="h-14 w-14 flex-shrink-0 rounded-[10px] product-fill"
+                  className="h-16 w-16 shrink-0 rounded-[10px] product-fill"
                   style={
                     it.image
-                      ? { backgroundImage: `url(${it.image})`, backgroundSize: "cover" }
+                      ? {
+                          backgroundImage: `url(${it.image})`,
+                          backgroundSize: "cover",
+                        }
                       : undefined
                   }
                 />
                 <div className="min-w-0 flex-1">
                   <strong className="block truncate text-sm">{it.name}</strong>
-                  <span className="text-[13px] text-muted">${it.price.toFixed(2)}</span>
+                  <span className="text-[13px] text-muted">
+                    ${it.price.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
@@ -59,7 +70,11 @@ export default function CartDrawer() {
                     +
                   </button>
                 </div>
-                <button onClick={() => removeItem(it.slug)} aria-label="remove" className="text-base text-muted">
+                <button
+                  onClick={() => removeItem(it.slug)}
+                  aria-label="remove"
+                  className="text-base text-muted"
+                >
                   🗑
                 </button>
               </div>
@@ -73,9 +88,13 @@ export default function CartDrawer() {
               <span>Total</span>
               <span className="text-grad">${total.toFixed(2)}</span>
             </div>
-            <button className="btn btn-primary justify-center">
+            <Link
+              href="/checkout"
+              onClick={closeCart}
+              className="btn btn-primary justify-center"
+            >
               Checkout <span className="btn-ic">↗</span>
-            </button>
+            </Link>
           </div>
         )}
       </aside>
