@@ -51,7 +51,7 @@ export default function Navbar() {
         <nav
           className={`${
             open
-              ? "absolute inset-x-0 top-full mt-2 flex flex-col gap-1 rounded-2xl border border-white/10 bg-black/90 p-3 backdrop-blur-xl"
+              ? "absolute inset-x-0 top-full mt-2 flex flex-col gap-1 border border-line bg-black/90 p-3 backdrop-blur-xl"
               : "hidden"
           } lg:flex lg:flex-1 lg:flex-row lg:items-center lg:justify-center lg:gap-1 lg:border-0 lg:bg-transparent lg:p-0`}
         >
@@ -62,8 +62,8 @@ export default function Navbar() {
                 key={href}
                 href={href}
                 onClick={() => setOpen(false)}
-                className={`flex items-center gap-2 rounded-full border border-transparent px-4 py-1.5 text-[14.5px] font-medium transition-colors hover:border-white/10 hover:bg-white/6 hover:text-ink ${
-                  active ? "bg-white/8 text-ink" : "text-muted"
+                className={`flex items-center gap-2 border border-transparent px-4 py-1.5 text-[14.5px] font-medium transition-colors hover:border-line hover:bg-white/5 hover:text-ink ${
+                  active ? "border-line bg-white/5 text-ink" : "text-muted"
                 }`}
               >
                 <Icon size={16} className="text-accent" />
@@ -76,7 +76,7 @@ export default function Navbar() {
             <Link
               href="/ventas"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-2 rounded-full border border-transparent px-4 py-1.5 text-[14.5px] font-medium text-muted transition-colors hover:border-white/10 hover:bg-white/6 hover:text-ink"
+              className="flex items-center gap-2 border border-transparent px-4 py-1.5 text-[14.5px] font-medium text-muted transition-colors hover:border-line hover:bg-white/5 hover:text-ink"
             >
               <BarChart3 size={16} className="text-accent" />
               Ventas
@@ -89,11 +89,11 @@ export default function Navbar() {
           <button
             onClick={openCart}
             aria-label="Carrito"
-            className="relative grid h-9 w-9 place-items-center rounded-xl border border-white/10 bg-white/6 backdrop-blur-xl transition-colors hover:bg-white/10"
+            className="relative grid h-9 w-9 place-items-center border border-line transition-colors hover:bg-white/10"
           >
             <ShoppingCart size={17} className="text-accent" />
             {count > 0 && (
-              <span className="absolute -right-1.5 -top-1.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-white px-1 text-[10px] font-bold text-black">
+              <span className="absolute -right-1.5 -top-1.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-accent px-1 text-[10px] font-bold text-black">
                 {count}
               </span>
             )}
@@ -105,14 +105,14 @@ export default function Navbar() {
                 href="/perfil"
                 aria-label="Mi perfil"
                 title={user.email}
-                className="grid h-9 w-9 place-items-center rounded-xl border border-white/10 bg-white/6 backdrop-blur-xl transition-colors hover:bg-white/10"
+                className="grid h-9 w-9 place-items-center border border-line transition-colors hover:bg-white/10"
               >
                 <User size={17} className="text-accent" />
               </Link>
             ) : (
               <button
                 onClick={() => openAuth("login")}
-                className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/6 px-3.5 py-2 text-[14px] font-medium backdrop-blur-xl transition-colors hover:bg-white/10"
+                className="flex items-center gap-2 border border-line px-3.5 py-2 text-[14px] font-medium transition-colors hover:border-accent hover:text-accent"
               >
                 <User size={16} className="text-accent" />
                 <span className="hidden sm:inline">Ingresar</span>
@@ -122,7 +122,7 @@ export default function Navbar() {
           <button
             onClick={() => setOpen((o) => !o)}
             aria-label="Menú"
-            className="grid h-9 w-9 place-items-center rounded-xl border border-white/10 bg-white/6 backdrop-blur-xl transition-colors hover:bg-white/10 lg:hidden"
+            className="grid h-9 w-9 place-items-center border border-line transition-colors hover:bg-white/10 lg:hidden"
           >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
