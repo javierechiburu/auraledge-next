@@ -9,71 +9,94 @@ export default function IntroOverlay() {
   const overlayRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   useLayoutEffect(() => {
     if (!overlayRef.current || !logoRef.current || !dotRef.current) return;
 
     document.body.style.overflow = "hidden";
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        defaults: { ease: "power2.out" },
-        onComplete: () => {
-          document.body.style.overflow = "";
-          setVisible(false);
-        },
-      });
+    let ctx: gsap.Context | undefined;
+    let cancelled = false;
 
-      // Estado inicial antes de comenzar
+    // La animación no arranca hasta que la imagen del logo esté lista.
+    const runTimeline = () => {
+      if (cancelled || !overlayRef.current) return;
 
-      tl.to(logoRef.current, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.75,
-      })
-        .to(logoRef.current, {
-          opacity: 0,
-          scale: 0.05,
-          duration: 0.5,
-          ease: "power2.in",
+      ctx = gsap.context(() => {
+        const tl = gsap.timeline({
+          defaults: { ease: "power2.out" },
+          onComplete: () => {
+            document.body.style.overflow = "";
+            setVisible(false);
+          },
+        });
+
+        tl.to(logoRef.current, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.75,
         })
-        .to(
-          dotRef.current,
-          {
+          .to(logoRef.current, {
             opacity: 0,
-            scale: 1,
-            duration: 0.75,
-          },
-          "<",
-        )
-        .to(
-          dotRef.current,
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 0.75,
-            ease: "back.out(1.8)",
-          },
-          "<",
-        )
-        .to(dotRef.current, {
-          opacity: 0,
-          duration: 0.4,
-          ease: "power1.out",
-        })
-        .to(
-          overlayRef.current,
-          {
-            "--reveal-r": "100%",
-            duration: 1.1,
-            ease: "power4.inOut",
-          },
-          "<",
-        );
-    }, overlayRef);
+            scale: 0.05,
+            duration: 0.5,
+            ease: "power2.in",
+          })
+          .to(
+            dotRef.current,
+            {
+              opacity: 0,
+              scale: 1,
+              duration: 0.75,
+            },
+            "<",
+          )
+          .to(
+            dotRef.current,
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 0.75,
+              ease: "back.out(1.8)",
+            },
+            "<",
+          )
+          .to(dotRef.current, {
+            opacity: 0,
+            duration: 0.4,
+            ease: "power1.out",
+          })
+          .to(
+            overlayRef.current,
+            {
+              "--reveal-r": "100%",
+              duration: 1.1,
+              ease: "power4.inOut",
+            },
+            "<",
+          );
+      }, overlayRef);
+    };
+
+    // Espera a que el logo esté totalmente cargado y decodificado.
+    const img = imgRef.current;
+    if (img) {
+      const start = () => runTimeline();
+      if (img.complete && img.naturalWidth > 0) {
+        // Ya en caché: nos aseguramos de que esté decodificada antes de animar.
+        img.decode().then(start).catch(start);
+      } else {
+        img.addEventListener("load", start, { once: true });
+        img.addEventListener("error", start, { once: true }); // no bloquear si falla
+      }
+    } else {
+      runTimeline();
+    }
 
     return () => {
-      ctx.revert();
+      cancelled = true;
+      ctx?.revert();
       document.body.style.overflow = "";
     };
   }, []);
@@ -86,7 +109,9 @@ export default function IntroOverlay() {
       className="intro-mask fixed inset-0 z-[200] grid place-items-center bg-black"
     >
       <div ref={logoRef} className="flex flex-col items-center gap-4">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
+          ref={imgRef}
           src="/assets/logo-bg.png"
           alt="GENIOMUSIC"
           className="h-64 w-64 rounded-full md:h-200 md:w-120"
