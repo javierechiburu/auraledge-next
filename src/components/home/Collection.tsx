@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Product } from "@/lib/types";
 import ProductCard from "@/components/beats/ProductCard";
 
@@ -23,9 +24,9 @@ export default function Collection({ products }: { products: Product[] }) {
       </div>
 
       <div className="mt-10 text-center">
-        <a href="#collection" className="btn btn-outline">
+        <Link href="/beats" className="btn btn-outline">
           Ver toda la colección
-        </a>
+        </Link>
       </div>
     </section>
   );

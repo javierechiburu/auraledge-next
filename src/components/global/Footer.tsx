@@ -68,7 +68,7 @@ export default function Footer() {
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           {/* Marca */}
           <div>
-            <Link href="/#top" className="inline-flex items-center gap-2 text-lg font-bold tracking-wide text-ink">
+            <Link href="/#top" className="inline-flex items-center gap-2 font-orbitron text-lg font-bold tracking-wide text-ink">
               <Image
                 src="/assets/logo-bg.png"
                 alt="GENIOMUSIC logo"
@@ -126,7 +126,7 @@ export default function Footer() {
         {/* Wordmark imponente */}
         <div
           aria-hidden
-          className="pointer-events-none mt-14 select-none text-center font-clash text-[clamp(64px,18vw,240px)] font-semibold uppercase leading-[0.8] tracking-tight text-white/[0.04]"
+          className="pointer-events-none mt-14 select-none text-center font-orbitron text-[clamp(34px,11vw,170px)] font-extrabold uppercase leading-[0.85] tracking-tight text-white/[0.05]"
         >
           Genio Music
         </div>

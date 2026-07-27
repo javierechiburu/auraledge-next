@@ -40,6 +40,7 @@
     var(--font-luckiest-guy), var(--font-manrope), system-ui, sans-serif;
   --font-clash:
     var(--font-clash-display), var(--font-manrope), system-ui, sans-serif;
+  --font-orbitron: var(--font-orbitron-src), var(--font-manrope), system-ui, sans-serif;
 }
 
 @layer base {
@@ -121,6 +122,38 @@
   animation:
     ring-bounce 2.4s ease-in-out infinite,
     ring-fade 2.4s ease-in-out infinite;
+}
+
+/* Confirmación "agregado al carrito": el ícono emerge desde atrás del botón
+   y se desliza hacia arriba desvaneciéndose. */
+@keyframes cart-fly {
+  0% {
+    opacity: 0;
+    transform: translateY(2px) scale(0.7);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(-6px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(1);
+  }
+}
+@utility animate-cart-fly {
+  animation: cart-fly 0.7s ease-out forwards;
+}
+@keyframes cart-pop {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(0.9);
+  }
+}
+@utility animate-cart-pop {
+  animation: cart-pop 0.28s ease-out;
 }
 
 @keyframes spin-slow {

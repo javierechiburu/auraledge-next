@@ -19,7 +19,7 @@ export default function BeatsGrid({
           No encontramos beats con esos filtros.
         </div>
       ) : (
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fit,minmax(240px,1fr))] sm:gap-4">
           {products.map((p) => (
             <ProductCard key={p.slug} product={p} />
           ))}

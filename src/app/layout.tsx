@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Luckiest_Guy } from "next/font/google";
+import { Manrope, Luckiest_Guy, Orbitron } from "next/font/google";
 import localFont from "next/font/local";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
@@ -20,6 +20,13 @@ const luckiestGuy = Luckiest_Guy({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-luckiest-guy",
+  display: "swap",
+});
+
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+  variable: "--font-orbitron-src",
   display: "swap",
 });
 
@@ -47,7 +54,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${manrope.variable} ${luckiestGuy.variable} ${clashDisplay.variable}`}
+      className={`${manrope.variable} ${luckiestGuy.variable} ${orbitron.variable} ${clashDisplay.variable}`}
     >
       <body>
         <AuthProvider>

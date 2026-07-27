@@ -80,7 +80,7 @@ export default function AudioPreview({
         type="button"
         onClick={toggle}
         aria-label={playing ? "Pausar preview" : "Reproducir preview"}
-        className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-grad text-[#1a0a00] transition hover:scale-105"
+        className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-black transition hover:scale-105"
       >
         {playing ? <Pause size={18} /> : <Play size={18} className="translate-x-[1px]" />}
       </button>

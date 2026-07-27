@@ -41,7 +41,7 @@ export default function BeatsFilters({
   onReset,
 }: BeatsFiltersProps) {
   return (
-    <aside className="h-fit space-y-7 border border-line bg-card p-6 lg:sticky lg:top-28">
+    <aside className="h-fit space-y-7 lg:sticky lg:top-28 lg:border lg:border-line lg:bg-card lg:p-6">
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-ink">Filtros</h2>
         <button

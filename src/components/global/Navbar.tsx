@@ -4,7 +4,15 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Disc3, ShoppingCart, User, BarChart3, Menu, X } from "lucide-react";
+import {
+  Home,
+  Disc3,
+  ShoppingCart,
+  User,
+  BarChart3,
+  Menu,
+  X,
+} from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 
@@ -23,9 +31,20 @@ export default function Navbar() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-white/6 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.5)] backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center gap-4 px-6 py-4">
         {/* Logo (izquierda) */}
-        <Link href="/#top" className="font-display flex items-center gap-2 text-[17px] tracking-wide">
-          <Image src="/assets/logo-bg.png" alt="GENIOMUSIC logo" width={28} height={28} className="rounded-full" />
-          GENIOMUSIC
+        <Link
+          href="/#top"
+          className="font-orbitron flex items-center gap-2 text-[16px] font-bold tracking-wide"
+        >
+          <Image
+            src="/assets/logo-bg.png"
+            alt="GENIOMUSIC logo"
+            width={28}
+            height={28}
+            className="rounded-full"
+          />
+          <span>
+            GENIO<span className="text-grad">MUSIC</span>
+          </span>
         </Link>
 
         {/* Menú (centrado) */}
