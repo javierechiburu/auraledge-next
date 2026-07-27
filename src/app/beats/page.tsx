@@ -13,7 +13,7 @@ export default async function BeatsPage() {
   return (
     <main className="pt-32 bg-bg">
       <div className="mx-auto max-w-[1280px] px-6 pb-10">
-        <h1 className="text-[clamp(26px,3.4vw,40px)] font-semibold tracking-tight text-ink">
+        <h1 className="text-[clamp(26px,3.4vw,40px)] font-orbitron font-extrabold leading-[0.9] tracking-tighter text-ink">
           Beats
         </h1>
         <p className="mt-2 max-w-xl text-[15px] text-muted">

@@ -33,10 +33,18 @@ export async function fulfillOrder(order: Order): Promise<void> {
   const html = renderEmail(order.customer.name, links);
 
   if (!RESEND_API_KEY) {
-    console.warn(
-      `[fulfillment] RESEND_API_KEY no configurado. Links generados para ${email}:\n` +
-        links.map((l) => `  - ${l.name}: ${l.url}`).join("\n")
-    );
+    // No se loguean los links firmados (son credenciales de descarga). En dev se
+    // muestran para poder probar; en producción solo se avisa que falta la key.
+    if (process.env.NODE_ENV === "production") {
+      console.warn(
+        `[fulfillment] RESEND_API_KEY no configurado: no se envió el correo a ${email}.`
+      );
+    } else {
+      console.warn(
+        `[fulfillment] RESEND_API_KEY no configurado (dev). Links para ${email}:\n` +
+          links.map((l) => `  - ${l.name}: ${l.url}`).join("\n")
+      );
+    }
   } else {
     try {
       const res = await fetch("https://api.resend.com/emails", {

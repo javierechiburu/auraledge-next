@@ -12,7 +12,7 @@ export default function CTA() {
           <div className="grid min-h-[430px] items-center lg:grid-cols-[1.1fr_1fr]">
             {/* Texto */}
             <div className="relative z-20 px-10 py-14 lg:px-16">
-              <h2 className="mb-5 text-[clamp(34px,4vw,56px)] font-extrabold leading-tight">
+              <h2 className="mb-5 text-[clamp(34px,4vw,56px)] font-orbitron font-extrabold leading-[0.9] tracking-tighter">
                 Encuentra Tu
                 <br />
                 Próximo Hit.
@@ -28,7 +28,10 @@ export default function CTA() {
                 className="group inline-flex items-center gap-2 bg-accent px-7 py-3.5 font-semibold text-black transition-colors hover:bg-white"
               >
                 Explorar colección
-                <ArrowUpRight size={18} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <ArrowUpRight
+                  size={18}
+                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
               </Link>
             </div>
 

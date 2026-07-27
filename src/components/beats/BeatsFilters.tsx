@@ -61,7 +61,7 @@ export default function BeatsFilters({
           id="sort"
           value={sort}
           onChange={(e) => onSortChange(e.target.value as SortOption)}
-          className="w-full rounded-md border border-line bg-panel px-3 py-2.5 text-sm text-ink outline-none focus:border-white/30"
+          className="field field-sm field-select"
         >
           <option value="relevance">Relevancia</option>
           <option value="price-asc">Precio: menor a mayor</option>
@@ -80,7 +80,7 @@ export default function BeatsFilters({
             max={priceRange[1]}
             value={priceRange[0]}
             onChange={(e) => onPriceRangeChange([Number(e.target.value), priceRange[1]])}
-            className="w-full rounded-md border border-line bg-panel px-3 py-2 text-sm text-ink outline-none focus:border-white/30"
+            className="field field-sm"
           />
           <span className="text-muted">–</span>
           <input
@@ -90,7 +90,7 @@ export default function BeatsFilters({
             max={priceBounds.max}
             value={priceRange[1]}
             onChange={(e) => onPriceRangeChange([priceRange[0], Number(e.target.value)])}
-            className="w-full rounded-md border border-line bg-panel px-3 py-2 text-sm text-ink outline-none focus:border-white/30"
+            className="field field-sm"
           />
         </div>
         <input
@@ -100,7 +100,7 @@ export default function BeatsFilters({
           max={priceBounds.max}
           value={priceRange[1]}
           onChange={(e) => onPriceRangeChange([priceRange[0], Number(e.target.value)])}
-          className="mt-3 w-full accent-white"
+          className="mt-3 w-full accent-accent"
         />
       </div>
 

@@ -4,7 +4,13 @@ import { ArrowUpRight } from "lucide-react";
 
 /* Íconos de marca (lucide-react de este proyecto no los incluye) */
 const InstagramIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-[17px] w-[17px]">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    className="h-[17px] w-[17px]"
+  >
     <rect x="3" y="3" width="18" height="18" rx="5" />
     <circle cx="12" cy="12" r="4" />
     <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
@@ -16,7 +22,13 @@ const TikTokIcon = () => (
   </svg>
 );
 const YoutubeIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-[17px] w-[17px]">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    className="h-[17px] w-[17px]"
+  >
     <rect x="2.5" y="5.5" width="19" height="13" rx="4" />
     <path d="M10.5 9.5l5 2.5-5 2.5v-5z" fill="currentColor" stroke="none" />
   </svg>
@@ -68,7 +80,10 @@ export default function Footer() {
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           {/* Marca */}
           <div>
-            <Link href="/#top" className="inline-flex items-center gap-2 font-orbitron text-lg font-bold tracking-wide text-ink">
+            <Link
+              href="/#top"
+              className="inline-flex items-center gap-2 font-orbitron text-lg font-bold tracking-wide text-ink"
+            >
               <Image
                 src="/assets/logo-bg.png"
                 alt="GENIOMUSIC logo"
@@ -76,11 +91,13 @@ export default function Footer() {
                 height={32}
                 className="rounded-full"
               />
-              GENIOMUSIC
+              <span className="font-orbitron text-sm font-extrabold tracking-tighter">
+                GENIO<span className="text-grad">MUSIC</span>
+              </span>
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
-              Vive el sonido sin límites. Pistas y beats originales, creados para
-              inspirar tu próxima producción.
+              Vive el sonido sin límites. Pistas y beats originales, creados
+              para inspirar tu próxima producción.
             </p>
 
             <div className="mt-6 flex items-center gap-2.5">
@@ -126,9 +143,9 @@ export default function Footer() {
         {/* Wordmark imponente */}
         <div
           aria-hidden
-          className="pointer-events-none mt-14 select-none text-center font-orbitron text-[clamp(34px,11vw,170px)] font-extrabold uppercase leading-[0.85] tracking-tight text-white/[0.05]"
+          className="pointer-events-none mt-14 select-none text-center font-orbitron text-[clamp(34px,11vw,170px)] font-extrabold uppercase leading-[0.85] tracking-tighter text-white/[0.05]"
         >
-          Genio Music
+          Genio <span className="text-amber-500/10">MUSIC</span>
         </div>
       </div>
 

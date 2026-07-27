@@ -296,4 +296,24 @@
   .chip {
     @apply text-[11px] text-muted bg-panel border border-line px-2.5 py-[5px] rounded-full;
   }
+  /* Campos de formulario: sharp, hairline, superficie sutil que se lee sobre
+     cualquier fondo oscuro, hover y foco amarillo. */
+  .field {
+    @apply w-full border border-line bg-white/[0.03] px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-muted/70;
+  }
+  .field:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  .field:focus {
+    border-color: var(--color-accent);
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  .field-sm {
+    @apply px-3 py-2.5 text-sm;
+  }
+  /* Select con chevron propio (oculta el nativo para verse consistente) */
+  .field-select {
+    @apply appearance-none bg-[length:16px] bg-[right_0.75rem_center] bg-no-repeat pr-10;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238a8a93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  }
 }

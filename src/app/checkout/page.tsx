@@ -54,7 +54,7 @@ export default function CheckoutPage() {
     return (
       <main className="min-h-screen bg-bg pb-20 pt-40 text-center">
         <div className="mx-auto max-w-160 px-6">
-          <h1 className="text-3xl font-semibold tracking-tight text-ink">
+          <h1 className="text-3xl font-orbitron font-extrabold leading-[0.9] tracking-tighter text-ink">
             Tu carrito está vacío
           </h1>
           <p className="mt-3 text-muted">
@@ -72,7 +72,7 @@ export default function CheckoutPage() {
     <main className="min-h-screen bg-bg pb-24 pt-32">
       <div className="mx-auto max-w-290 px-6">
         <div className="mb-12">
-          <h1 className="text-[clamp(28px,3.4vw,40px)] font-semibold tracking-tight text-ink">
+          <h1 className="text-[clamp(28px,3.4vw,40px)] font-orbitron font-extrabold leading-[0.9] tracking-tighter text-ink">
             Checkout
           </h1>
           <p className="mt-3 max-w-lg text-[15px] text-muted">

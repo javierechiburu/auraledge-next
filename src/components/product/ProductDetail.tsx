@@ -30,7 +30,10 @@ export default function ProductDetail({ product }: { product: Product }) {
           className="object-cover opacity-90 grayscale"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        <ProductMedia image={product.image} sizes="(max-width:960px) 100vw, 600px" />
+        <ProductMedia
+          image={product.image}
+          sizes="(max-width:960px) 100vw, 600px"
+        />
       </div>
 
       {/* Info */}
@@ -40,9 +43,10 @@ export default function ProductDetail({ product }: { product: Product }) {
             {product.tag}
           </span>
         )}
-        <h1 className="mb-4 text-[clamp(28px,3.6vw,44px)] font-semibold leading-[1.1] tracking-tight text-ink">
+        <h1 className="mb-4 text-[clamp(28px,3.6vw,44px)] font-orbitron text-2xl font-extrabold tracking-tighter leading-[1.1] text-ink">
           {product.name}
         </h1>
+
         <p className="mb-6 max-w-[480px] text-[15px] leading-relaxed text-muted">
           {product.description}
         </p>
@@ -62,9 +66,13 @@ export default function ProductDetail({ product }: { product: Product }) {
         </div>
 
         <div className="mb-7 flex items-center gap-4">
-          <span className="text-[32px] font-semibold tabular-nums text-ink">{clp(product.price)}</span>
+          <span className="text-[32px] font-semibold tabular-nums text-ink">
+            {clp(product.price)}
+          </span>
           {product.compareAtPrice && (
-            <span className="tabular-nums text-muted line-through">{clp(product.compareAtPrice)}</span>
+            <span className="tabular-nums text-muted line-through">
+              {clp(product.compareAtPrice)}
+            </span>
           )}
         </div>
 

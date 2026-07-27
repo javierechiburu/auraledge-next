@@ -16,6 +16,8 @@ export interface Product {
   compareAtPrice?: number | null;
   tag?: string | null;
   badge?: string | null;
+  /** Categoría del producto (una de CATEGORIES). */
+  category?: string | null;
   features: string[];
   /** Género musical (Trap, Reggaetón, Drill…). */
   genre?: string | null;

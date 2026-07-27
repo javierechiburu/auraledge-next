@@ -12,9 +12,9 @@ export async function POST(request: Request) {
   const email = body?.email?.trim().toLowerCase();
   const password = body?.password ?? "";
 
-  if (!email || !EMAIL_RE.test(email) || password.length < 6) {
+  if (!email || !EMAIL_RE.test(email) || password.length < 8) {
     return NextResponse.json(
-      { error: "Correo inválido o contraseña menor a 6 caracteres." },
+      { error: "Correo inválido o contraseña menor a 8 caracteres." },
       { status: 400 }
     );
   }

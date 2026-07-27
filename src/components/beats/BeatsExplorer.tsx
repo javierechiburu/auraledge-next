@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Filter, X } from "lucide-react";
 import { Product } from "@/lib/types";
+import { CATEGORIES, categoryBySlug, slugOfCategory } from "@/lib/categories";
 import BeatsFilters, { SortOption } from "./BeatsFilters";
 import BeatsGrid from "./BeatsGrid";
 
@@ -32,9 +33,28 @@ export default function BeatsExplorer({ products }: { products: Product[] }) {
   ]);
   const [sort, setSort] = useState<SortOption>("relevance");
   const [filtersOpen, setFiltersOpen] = useState(false);
+  // Categoría seleccionada (label) o null = "Todas".
+  const [category, setCategory] = useState<string | null>(null);
+
+  // Lee ?categoria=<slug> de la URL al montar.
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get("plantilla");
+    const cat = categoryBySlug(slug);
+    if (cat) setCategory(cat.label);
+  }, []);
+
+  function selectCategory(label: string | null) {
+    setCategory(label);
+    const url = new URL(window.location.href);
+    const slug = slugOfCategory(label);
+    if (slug) url.searchParams.set("plantilla", slug);
+    else url.searchParams.delete("plantilla");
+    window.history.replaceState({}, "", url.toString());
+  }
 
   const filtered = useMemo(() => {
     let result = products.filter((p) => {
+      if (category && p.category !== category) return false;
       if (selectedTags.length && !(p.tag && selectedTags.includes(p.tag)))
         return false;
       if (
@@ -56,7 +76,7 @@ export default function BeatsExplorer({ products }: { products: Product[] }) {
       );
 
     return result;
-  }, [products, selectedTags, selectedBadges, priceRange, sort]);
+  }, [products, category, selectedTags, selectedBadges, priceRange, sort]);
 
   function resetFilters() {
     setSelectedTags([]);
@@ -82,8 +102,36 @@ export default function BeatsExplorer({ products }: { products: Product[] }) {
     />
   );
 
+  const tabClass = (activeTab: boolean) =>
+    `border px-4 py-2 text-sm font-medium transition-colors ${
+      activeTab
+        ? "border-accent bg-accent text-black"
+        : "border-line text-muted hover:border-white/25 hover:text-ink"
+    }`;
+
   return (
     <div className="mx-auto max-w-7xl px-6 pb-20">
+      {/* Barra de PLANTILLAS (aparte de la "Categoría" de los filtros) */}
+      <div className="mb-8 border-b border-line pb-6">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted">
+          Plantillas
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <button onClick={() => selectCategory(null)} className={tabClass(category === null)}>
+            Todas
+          </button>
+          {CATEGORIES.map((c) => (
+            <button
+              key={c.slug}
+              onClick={() => selectCategory(c.label)}
+              className={tabClass(category === c.label)}
+            >
+              {c.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Botón de filtros (solo mobile) */}
       <div className="mb-5 lg:hidden">
         <button

@@ -83,6 +83,7 @@ function mapProduct(raw: Record<string, unknown>): Product {
     compareAtPrice: p.compareAtPrice != null ? Number(p.compareAtPrice) : null,
     tag: (p.tag as string) ?? null,
     badge: (p.badge as string) ?? null,
+    category: (p.category as string) ?? null,
     features: Array.isArray(p.features)
       ? (p.features as string[])
       : typeof p.features === "string"

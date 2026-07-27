@@ -20,7 +20,7 @@ export default function BestValue({ product: s }: { product: Product }) {
       id="feature"
       className="mx-auto max-w-[1280px] scroll-mt-24 px-6 py-10 md:py-17.5"
     >
-      <h2 className="font-display relative z-0 mb-[-20px] text-center text-[clamp(48px,9vw,120px)] tracking-[2px] text-[rgba(255,176,32,.1)]">
+      <h2 className="font-orbitron font-extrabold leading-[0.9] tracking-tighter relative z-0 mb-[-20px] text-center text-[clamp(48px,9vw,120px)] text-[rgba(255,176,32,.1)]">
         ÚLTIMO BEAT
       </h2>
 
@@ -50,7 +50,7 @@ export default function BestValue({ product: s }: { product: Product }) {
                 onClick={() => setIsPlaying((p) => !p)}
                 aria-label={isPlaying ? "Pause preview" : "Play preview"}
                 aria-pressed={isPlaying}
-                className="pointer-events-auto absolute left-[45%] top-63 grid translate-y-1/2 cursor-pointer place-items-center"
+                className="pointer-events-auto absolute left-[45%] top-59 grid translate-y-1/2 cursor-pointer place-items-center"
               >
                 <div className="grid h-16 w-16 place-items-center rounded-full bg-black shadow-lg transition-transform duration-200 hover:scale-105 active:scale-95">
                   {isPlaying ? (
@@ -84,7 +84,7 @@ export default function BestValue({ product: s }: { product: Product }) {
                 </span>
 
                 <div className="mt-4 flex flex-wrap items-center justify-center gap-3 2xl:justify-start">
-                  <h3 className="font-display text-4xl leading-tight text-white md:text-5xl">
+                  <h3 className="font-orbitron font-extrabold leading-[0.9] tracking-tighter text-4xl text-white md:text-5xl">
                     {s.name}
                   </h3>
                   <div className="flex h-8 items-end gap-[2px]">

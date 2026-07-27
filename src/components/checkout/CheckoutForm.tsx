@@ -42,7 +42,7 @@ export default function CheckoutForm({
           required
           value={customer.name}
           onChange={(e) => onChange({ ...customer, name: e.target.value })}
-          className="w-full rounded-md border border-line bg-panel px-4 py-3.5 text-sm text-ink outline-none transition-colors focus:border-white/30"
+          className="field"
           placeholder="Juan Pérez"
         />
       </div>
@@ -60,7 +60,7 @@ export default function CheckoutForm({
           required
           value={customer.email}
           onChange={(e) => onChange({ ...customer, email: e.target.value })}
-          className="w-full rounded-md border border-line bg-panel px-4 py-3.5 text-sm text-ink outline-none transition-colors focus:border-white/30"
+          className="field"
           placeholder="juan@email.com"
         />
       </div>
@@ -76,7 +76,7 @@ export default function CheckoutForm({
           id="phone"
           value={customer.phone ?? ""}
           onChange={(e) => onChange({ ...customer, phone: e.target.value })}
-          className="w-full rounded-md border border-line bg-panel px-4 py-3.5 text-sm text-ink outline-none transition-colors focus:border-white/30"
+          className="field"
           placeholder="+56 9 1234 5678"
         />
       </div>

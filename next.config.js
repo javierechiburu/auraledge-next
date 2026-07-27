@@ -9,7 +9,32 @@ const { hostname, protocol } = (() => {
   }
 })();
 
+const isProd = process.env.NODE_ENV === "production";
+
+// Content-Security-Policy. Se mantiene 'unsafe-inline' en scripts/estilos para no
+// romper la hidratación de Next ni los estilos inline de GSAP/Tailwind, y
+// 'unsafe-eval' solo en dev (React Refresh). Aun así endurece: object-src none,
+// base-uri self, frame-ancestors none (anti-clickjacking) y orígenes de
+// img/media/connect/font. Sube el nivel usando nonces si más adelante se requiere.
+const csp = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${isProd ? "" : " 'unsafe-eval'"}`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https:",
+  "media-src 'self' https:",
+  "font-src 'self' data:",
+  "connect-src 'self' https:",
+  "frame-src https://*.mercadopago.com https://*.mercadolibre.com",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  // Solo en prod: en dev rompería las imágenes http de Strapi local.
+  ...(isProd ? ["upgrade-insecure-requests"] : []),
+].join("; ");
+
 const securityHeaders = [
+  { key: "Content-Security-Policy", value: csp },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
