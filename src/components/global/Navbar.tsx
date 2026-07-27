@@ -76,7 +76,11 @@ export default function Navbar() {
             <Link
               href="/ventas"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-2 border border-transparent px-4 py-1.5 text-[14.5px] font-medium text-muted transition-colors hover:border-line hover:bg-white/5 hover:text-ink"
+              className={`flex items-center gap-2 border border-transparent px-4 py-1.5 text-[14.5px] font-medium transition-colors hover:border-line hover:bg-white/5 hover:text-ink ${
+                pathname?.startsWith("/ventas")
+                  ? "border-line bg-white/5 text-ink"
+                  : "text-muted"
+              }`}
             >
               <BarChart3 size={16} className="text-accent" />
               Ventas

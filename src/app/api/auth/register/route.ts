@@ -1,23 +1,15 @@
 import { NextResponse } from "next/server";
 import { strapiRegister, StrapiAuthError } from "@/lib/api/strapi-auth";
 import { setSessionCookie } from "@/lib/auth/session";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { registerSchema, parsePayload } from "@/lib/validation";
 
 export async function POST(request: Request) {
-  const body = (await request.json().catch(() => null)) as
-    | { email?: string; password?: string }
-    | null;
-
-  const email = body?.email?.trim().toLowerCase();
-  const password = body?.password ?? "";
-
-  if (!email || !EMAIL_RE.test(email) || password.length < 8) {
-    return NextResponse.json(
-      { error: "Correo inválido o contraseña menor a 8 caracteres." },
-      { status: 400 }
-    );
+  const raw = await request.json().catch(() => null);
+  const parsed = parsePayload(registerSchema, raw);
+  if (!parsed.ok) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
+  const { email, password } = parsed.data;
 
   try {
     const { jwt, user } = await strapiRegister(email, password);

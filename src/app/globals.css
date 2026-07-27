@@ -316,4 +316,37 @@
     @apply appearance-none bg-[length:16px] bg-[right_0.75rem_center] bg-no-repeat pr-10;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238a8a93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   }
+
+  /* Prosa para páginas legales (Términos / Privacidad / Licencias) */
+  .legal h2 {
+    color: var(--color-ink);
+    font-weight: 600;
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+  }
+  .legal p {
+    color: var(--color-muted);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .legal ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin-top: 0.5rem;
+  }
+  .legal li {
+    color: var(--color-muted);
+    font-size: 15px;
+    line-height: 1.7;
+    margin-top: 0.25rem;
+  }
+  .legal a {
+    color: var(--color-accent);
+  }
+  .legal a:hover {
+    text-decoration: underline;
+  }
+  .legal strong {
+    color: var(--color-ink);
+  }
 }

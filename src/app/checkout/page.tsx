@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { apiPost, ApiError } from "@/lib/http";
+import { customerSchema, firstError } from "@/lib/validation";
 import { Customer, MPPreferenceResponse } from "@/lib/types";
 import CartSummary from "@/components/checkout/CartSummary";
 import CheckoutForm from "@/components/checkout/CheckoutForm";
@@ -29,8 +30,14 @@ export default function CheckoutPage() {
   }, [user]);
 
   async function handleSubmit() {
-    setLoading(true);
     setError(null);
+    // Validación cliente con el MISMO esquema zod del servidor.
+    const err = firstError(customerSchema, customer);
+    if (err) {
+      setError(err);
+      return;
+    }
+    setLoading(true);
     try {
       const { init_point } = await apiPost<MPPreferenceResponse>(
         "/api/checkout",

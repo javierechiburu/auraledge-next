@@ -7,12 +7,13 @@ import { Download } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { UserOrder } from "@/lib/types";
 
-const STATUS_LABEL: Record<UserOrder["status"], { text: string; cls: string }> = {
-  approved: { text: "Pagada", cls: "bg-green-500/15 text-green-400" },
-  pending: { text: "Pendiente", cls: "bg-amber/15 text-amber" },
-  rejected: { text: "Rechazada", cls: "bg-red-500/15 text-red-400" },
-  cancelled: { text: "Cancelada", cls: "bg-white/10 text-muted" },
-};
+const STATUS_LABEL: Record<UserOrder["status"], { text: string; cls: string }> =
+  {
+    approved: { text: "Pagada", cls: "bg-green-500/15 text-green-400" },
+    pending: { text: "Pendiente", cls: "bg-amber/15 text-amber" },
+    rejected: { text: "Rechazada", cls: "bg-red-500/15 text-red-400" },
+    cancelled: { text: "Cancelada", cls: "bg-white/10 text-muted" },
+  };
 
 function formatCLP(n: number) {
   return "$" + n.toLocaleString("es-CL");
@@ -36,7 +37,11 @@ export default function ProfilePage() {
   }, [user]);
 
   if (loading) {
-    return <main className="min-h-screen bg-black pt-40 text-center text-muted">Cargando…</main>;
+    return (
+      <main className="min-h-screen bg-black pt-40 text-center text-muted">
+        Cargando…
+      </main>
+    );
   }
 
   if (!user) {
@@ -50,7 +55,10 @@ export default function ProfilePage() {
           <button onClick={() => openAuth("login")} className="btn btn-primary">
             Iniciar sesión
           </button>
-          <button onClick={() => router.push("/beats")} className="btn btn-outline">
+          <button
+            onClick={() => router.push("/beats")}
+            className="btn btn-outline"
+          >
             Ver beats
           </button>
         </div>
@@ -63,26 +71,38 @@ export default function ProfilePage() {
       <div className="mx-auto max-w-[900px]">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="font-display text-[clamp(28px,4vw,42px)] normal-case">Mi perfil</h1>
+            <h1 className="font-orbitron text-[clamp(28px,4vw,44px)] font-extrabold uppercase tracking-tight text-ink">
+              Mi perfil
+            </h1>
             <p className="mt-1 text-sm text-muted">{user.email}</p>
           </div>
           <div className="flex items-center gap-3">
             {user.isAdmin && (
-              <button onClick={() => router.push("/ventas")} className="btn btn-outline">
+              <button
+                onClick={() => router.push("/ventas")}
+                className="btn btn-outline"
+              >
                 Ventas
               </button>
             )}
-            <button onClick={() => logout().then(() => router.push("/"))} className="btn btn-outline">
+            <button
+              onClick={() => logout().then(() => router.push("/"))}
+              className="btn btn-outline"
+            >
               Cerrar sesión
             </button>
           </div>
         </div>
 
-        <h2 className="mb-4 mt-12 font-display text-xl normal-case">Mis compras</h2>
+        <h2 className="mb-4 mt-12 text-xl font-orbitron text-[clamp(28px,4vw,44px)] font-extrabold normal-case tracking-tight text-ink">
+          Mis compras
+        </h2>
 
         {error && <p className="text-sm text-red-400">{error}</p>}
 
-        {orders === null && !error && <p className="text-sm text-muted">Cargando compras…</p>}
+        {orders === null && !error && (
+          <p className="text-sm text-muted">Cargando compras…</p>
+        )}
 
         {orders && orders.length === 0 && (
           <div className="rounded-2xl border border-line bg-black/40 p-8 text-center">
@@ -97,21 +117,31 @@ export default function ProfilePage() {
           {orders?.map((order) => {
             const badge = STATUS_LABEL[order.status];
             return (
-              <div key={order.id} className="rounded-2xl border border-line bg-black/40 p-5">
+              <div
+                key={order.id}
+                className="rounded-2xl border border-line bg-black/40 p-5"
+              >
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <p className="text-sm text-muted">
                       {order.createdAt
-                        ? new Date(order.createdAt).toLocaleDateString("es-CL", {
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                          })
+                        ? new Date(order.createdAt).toLocaleDateString(
+                            "es-CL",
+                            {
+                              day: "2-digit",
+                              month: "long",
+                              year: "numeric",
+                            },
+                          )
                         : `Orden ${order.id.slice(0, 8)}`}
                     </p>
-                    <p className="mt-0.5 font-semibold">{formatCLP(order.total)}</p>
+                    <p className="mt-0.5 font-semibold">
+                      {formatCLP(order.total)}
+                    </p>
                   </div>
-                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${badge.cls}`}>
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${badge.cls}`}
+                  >
                     {badge.text}
                   </span>
                 </div>
@@ -120,8 +150,13 @@ export default function ProfilePage() {
                   {order.items.map((it) => {
                     const dl = order.downloads?.find((d) => d.slug === it.slug);
                     return (
-                      <li key={it.slug} className="flex items-center justify-between gap-3 py-2.5">
-                        <span className="min-w-0 truncate text-sm">{it.name}</span>
+                      <li
+                        key={it.slug}
+                        className="flex items-center justify-between gap-3 py-2.5"
+                      >
+                        <span className="min-w-0 truncate text-sm">
+                          {it.name}
+                        </span>
                         {dl ? (
                           <a
                             href={dl.url}
@@ -131,7 +166,9 @@ export default function ProfilePage() {
                           </a>
                         ) : (
                           <span className="shrink-0 text-xs text-muted">
-                            {order.status === "pending" ? "Esperando pago" : "No disponible"}
+                            {order.status === "pending"
+                              ? "Esperando pago"
+                              : "No disponible"}
                           </span>
                         )}
                       </li>

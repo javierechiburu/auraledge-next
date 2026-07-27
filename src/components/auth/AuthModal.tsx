@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import GoogleButton from "@/components/auth/GoogleButton";
+import { firstError, loginSchema, registerSchema } from "@/lib/validation";
 
 export default function AuthModal() {
   const { authOpen, authMode, openAuth, closeAuth, login, register } =
@@ -45,8 +46,10 @@ export default function AuthModal() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (!isLogin && password.length < 8) {
-      setError("La contraseña debe tener al menos 8 caracteres.");
+    // Validación cliente con el MISMO esquema zod que valida el servidor.
+    const err = firstError(isLogin ? loginSchema : registerSchema, { email, password });
+    if (err) {
+      setError(err);
       return;
     }
     setLoading(true);

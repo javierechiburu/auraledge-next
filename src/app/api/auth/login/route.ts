@@ -1,18 +1,15 @@
 import { NextResponse } from "next/server";
 import { strapiLogin, StrapiAuthError } from "@/lib/api/strapi-auth";
 import { setSessionCookie } from "@/lib/auth/session";
+import { loginSchema, parsePayload } from "@/lib/validation";
 
 export async function POST(request: Request) {
-  const body = (await request.json().catch(() => null)) as
-    | { email?: string; password?: string }
-    | null;
-
-  const email = body?.email?.trim().toLowerCase();
-  const password = body?.password ?? "";
-
-  if (!email || !password) {
-    return NextResponse.json({ error: "Ingresa correo y contraseña." }, { status: 400 });
+  const raw = await request.json().catch(() => null);
+  const parsed = parsePayload(loginSchema, raw);
+  if (!parsed.ok) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
+  const { email, password } = parsed.data;
 
   try {
     const { jwt, user } = await strapiLogin(email, password);

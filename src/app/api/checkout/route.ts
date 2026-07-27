@@ -3,19 +3,16 @@ import { buildVerifiedCart, createOrder, updateOrder } from "@/lib/api/strapi";
 import { createPreference, isMercadoPagoConfigured } from "@/lib/api/mercadopago";
 import { strapiMe } from "@/lib/api/strapi-auth";
 import { getSessionToken } from "@/lib/auth/session";
-import { CheckoutPayload, MPPreferenceResponse } from "@/lib/types";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { checkoutSchema, parsePayload } from "@/lib/validation";
+import { MPPreferenceResponse } from "@/lib/types";
 
 export async function POST(request: Request) {
-  const body = (await request.json().catch(() => null)) as CheckoutPayload | null;
-
-  const name = body?.customer?.name?.trim();
-  const email = body?.customer?.email?.trim().toLowerCase();
-
-  if (!body?.items?.length || !name || !email || !EMAIL_RE.test(email)) {
-    return NextResponse.json({ error: "Payload de checkout inválido" }, { status: 400 });
+  const raw = await request.json().catch(() => null);
+  const parsed = parsePayload(checkoutSchema, raw);
+  if (!parsed.ok) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
+  const body = parsed.data;
 
   if (!isMercadoPagoConfigured()) {
     return NextResponse.json(
@@ -34,7 +31,11 @@ export async function POST(request: Request) {
     );
   }
 
-  const customer = { name, email, phone: body.customer.phone?.trim() || undefined };
+  const customer = {
+    name: body.customer.name,
+    email: body.customer.email,
+    phone: body.customer.phone || undefined,
+  };
 
   // Si hay sesión, se liga la orden al usuario para que aparezca en su perfil.
   const jwt = await getSessionToken();
