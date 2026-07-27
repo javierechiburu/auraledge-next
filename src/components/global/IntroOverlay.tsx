@@ -40,6 +40,15 @@ export default function IntroOverlay() {
         .to(
           dotRef.current,
           {
+            opacity: 0,
+            scale: 1,
+            duration: 0.75,
+          },
+          "<",
+        )
+        .to(
+          dotRef.current,
+          {
             opacity: 1,
             scale: 1,
             duration: 0.75,

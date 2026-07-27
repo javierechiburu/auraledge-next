@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Manrope, Luckiest_Guy } from "next/font/google";
 import localFont from "next/font/local";
 import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/global/Navbar";
 import CartDrawer from "@/components/global/CartDrawer";
+import AuthModal from "@/components/auth/AuthModal";
 import IntroOverlay from "@/components/global/IntroOverlay";
 import "./globals.css";
 
@@ -48,12 +50,15 @@ export default function RootLayout({
       className={`${manrope.variable} ${luckiestGuy.variable} ${clashDisplay.variable}`}
     >
       <body>
-        <CartProvider>
-          <IntroOverlay />
-          <Navbar />
-          {children}
-          <CartDrawer />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <IntroOverlay />
+            <Navbar />
+            {children}
+            <CartDrawer />
+            <AuthModal />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,113 +1,137 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Play, Pause, SkipBack, SkipForward, Star } from "lucide-react";
+import { Play, Pause, ShoppingCart } from "lucide-react";
 import { Product } from "@/lib/types";
 import { WAVEFORM } from "@/lib/waveform";
 import AddToCartButton from "@/components/shared/AddToCartButton";
 
+function formatCLP(n: number) {
+  return "$" + Math.round(n).toLocaleString("es-CL");
+}
+
 export default function ProductCard({ product: p }: { product: Product }) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const rating = 4;
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const maxSeconds = p.previewSeconds ?? 30;
+
+  const meta = [p.genre, p.bpm ? `${p.bpm} BPM` : null].filter(Boolean).join(" · ");
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    function onTime() {
+      if (!audio) return;
+      if (audio.currentTime >= maxSeconds) {
+        audio.pause();
+        audio.currentTime = 0;
+        setIsPlaying(false);
+      }
+    }
+    function onEnded() {
+      setIsPlaying(false);
+    }
+    audio.addEventListener("timeupdate", onTime);
+    audio.addEventListener("ended", onEnded);
+    return () => {
+      audio.removeEventListener("timeupdate", onTime);
+      audio.removeEventListener("ended", onEnded);
+    };
+  }, [maxSeconds]);
+
+  function togglePlay() {
+    const audio = audioRef.current;
+    if (!audio || !p.previewUrl) return;
+    if (isPlaying) {
+      audio.pause();
+      setIsPlaying(false);
+    } else {
+      void audio.play();
+      setIsPlaying(true);
+    }
+  }
 
   return (
-    <article className="scroll-reveal group relative overflow-hidden rounded-[28px] border-2 border-amber/50 bg-black shadow-2xl transition duration-300 hover:-translate-y-1.5 hover:border-amber">
-      {/* Precio */}
-      <div className="absolute right-0 top-0 z-20 rounded-bl-2xl bg-grad px-4 py-2 text-lg font-bold text-[#1a0a00]">
-        ${Math.round(p.price)}
-      </div>
+    <article className="group relative flex flex-col border border-line bg-card transition-colors duration-200 hover:border-white/20">
+      {/* Portada / cover */}
+      <Link
+        href={`/beats/${p.slug}`}
+        className="relative block aspect-square overflow-hidden bg-[#0d0d0f]"
+      >
+        <Image
+          src="/assets/play-vinilo.png"
+          alt={p.name}
+          fill
+          sizes="(max-width:768px) 90vw, 300px"
+          className="object-cover opacity-90 grayscale transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
-      {/* Cover + vinilo */}
-      <div className="relative flex justify-center pt-5">
-        <div className="relative z-10 aspect-video w-[80%] overflow-hidden rounded-[18px]">
-          <Image
-            src="/assets/play-vinilo.png"
-            alt={p.name}
-            fill
-            sizes="(max-width:768px) 80vw, 320px"
-            className="object-cover brightness-75 saturate-50"
-          />
-          {/* Atenúa el rojizo de la foto base hacia negro/ámbar sin tocar el asset */}
+        {/* Botón play (overlay) */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            togglePlay();
+          }}
+          disabled={!p.previewUrl}
+          aria-label={isPlaying ? "Pausar preview" : "Reproducir preview"}
+          className="absolute bottom-3 left-3 grid h-10 w-10 place-items-center rounded-full bg-accent text-black shadow-lg transition hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-30"
+        >
+          {isPlaying ? (
+            <Pause size={16} className="fill-black" />
+          ) : (
+            <Play size={16} className="translate-x-[1px] fill-black" />
+          )}
+        </button>
 
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 px-3 text-center">
-            <div className="flex h-3.5 items-end gap-0.5">
-              {WAVEFORM.slice(0, 12).map((h, i) => (
-                <span
-                  key={i}
-                  style={{
-                    height: `${h}%`,
-                    animationDelay: `${(i % 8) * 0.09}s`,
-                    animationPlayState: isPlaying ? "running" : "paused",
-                  }}
-                  className="animate-bar-bounce w-0.5 origin-bottom rounded-full bg-amber/80"
-                />
-              ))}
-            </div>
-            <p className="font-display text-sm leading-none text-white">
-              {p.name}
-            </p>
-          </div>
+        {/* Waveform animada al reproducir */}
+        <div className="absolute bottom-4 right-3 flex h-5 items-end gap-[2px]">
+          {WAVEFORM.slice(0, 14).map((h, i) => (
+            <span
+              key={i}
+              style={{
+                height: `${h}%`,
+                animationDelay: `${(i % 8) * 0.09}s`,
+                animationPlayState: isPlaying ? "running" : "paused",
+              }}
+              className="animate-bar-bounce w-[2px] origin-bottom rounded-full bg-white/70"
+            />
+          ))}
         </div>
-      </div>
+      </Link>
 
-      {/* Player */}
-      <section className="px-5 pt-4">
-        <div className="mt-4 flex items-center justify-center gap-5">
-          <SkipBack className="text-muted" size={18} />
-
-          <button
-            type="button"
-            onClick={() => setIsPlaying((v) => !v)}
-            aria-label={isPlaying ? "Pause preview" : "Play preview"}
-            aria-pressed={isPlaying}
-            className={`grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-white shadow-xl transition hover:scale-105 active:scale-95 ${
-              isPlaying ? "animate-neon-pulse" : ""
-            }`}
-          >
-            {isPlaying ? (
-              <Pause className="fill-brand-2 text-brand-2" size={18} />
-            ) : (
-              <Play className="fill-brand-2 text-brand-2" size={18} />
-            )}
-          </button>
-
-          <SkipForward className="text-muted" size={18} />
-        </div>
-      </section>
+      {p.previewUrl && <audio ref={audioRef} src={p.previewUrl} preload="none" />}
 
       {/* Info + compra */}
-      <section className="mt-4 border-t border-line bg-black/60 p-5">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h3 className="truncate font-display text-lg leading-none text-white">
+      <div className="flex flex-col gap-3 p-4">
+        <div className="min-w-0">
+          <Link href={`/beats/${p.slug}`}>
+            <h3 className="truncate text-[15px] font-semibold text-ink transition-colors hover:text-white">
               {p.name}
             </h3>
-            <p className="mt-1.5 line-clamp-1 text-xs text-muted">
-              {p.description}
-            </p>
-          </div>
-
-          <div className="flex shrink-0 gap-0.5">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star
-                key={i}
-                size={13}
-                className={i < rating ? "fill-amber text-amber" : "text-muted"}
-              />
-            ))}
-          </div>
+          </Link>
+          {meta && (
+            <p className="mt-1 truncate text-xs uppercase tracking-wide text-muted">{meta}</p>
+          )}
         </div>
 
-        <div className="mt-4 flex gap-2.5">
+        <div className="flex items-center justify-between">
+          <span className="text-[15px] font-semibold tabular-nums text-ink">
+            {formatCLP(p.price)}
+          </span>
+
           <AddToCartButton
             product={p}
-            label="Agregar al carrito"
-            className="btn btn-primary btn-sm flex-1 justify-center"
-          />
+            ariaLabel={`Agregar ${p.name} al carrito`}
+            className="grid h-10 w-10 place-items-center border border-line text-accent transition-colors hover:bg-accent hover:text-black"
+          >
+            <ShoppingCart size={17} />
+          </AddToCartButton>
         </div>
-      </section>
+      </div>
     </article>
   );
 }

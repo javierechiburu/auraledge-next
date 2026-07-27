@@ -22,20 +22,24 @@
 
 /* ===== Design tokens (generan utilidades: bg-bg, text-ink, border-line, etc.) ===== */
 @theme {
-  --color-bg: #0a0705;
-  --color-card: #120a06;
-  --color-panel: #0e0805;
-  --color-ink: #f4ede6;
-  --color-muted: #9b8b7d;
+  /* Fondo plano casi-negro neutro (dark UI 2026), sin difuminados */
+  --color-bg: #0a0a0b;
+  --color-card: #101012;
+  --color-panel: #0e0e10;
+  --color-ink: #ededf0;
+  --color-muted: #8a8a93;
   --color-brand: #ff7a18;
   --color-brand-2: #ff3d00;
   --color-amber: #ffb020;
-  --color-line: rgba(255, 140, 40, 0.14);
+  /* Acento amarillo para íconos (genera text-accent, bg-accent, fill-accent, …) */
+  --color-accent: #ffcf2e;
+  /* Bordes hairline neutros */
+  --color-line: rgba(255, 255, 255, 0.09);
   --font-sans: var(--font-manrope), system-ui, sans-serif;
   --font-display:
     var(--font-luckiest-guy), var(--font-manrope), system-ui, sans-serif;
-  --font-clash: var(--font-clash-display), var(--font-manrope), system-ui,
-    sans-serif;
+  --font-clash:
+    var(--font-clash-display), var(--font-manrope), system-ui, sans-serif;
 }
 
 @layer base {
@@ -46,18 +50,8 @@
   body {
     font-family: var(--font-sans);
     color: var(--color-ink);
-    background:
-      radial-gradient(
-        1200px 600px at 80% -5%,
-        rgba(255, 90, 10, 0.18),
-        transparent 60%
-      ),
-      radial-gradient(
-        900px 500px at 10% 20%,
-        rgba(255, 60, 0, 0.08),
-        transparent 55%
-      ),
-      var(--color-bg);
+    /* Fondo plano, sin gradientes/difuminados */
+    background: var(--color-bg);
   }
 }
 
@@ -69,7 +63,7 @@
   color: var(--color-amber-500);
 }
 @utility shadow-glow {
-  box-shadow: 0 30px 80px -30px rgba(245, 158, 11, 0.35);
+  box-shadow: 0 30px 80px -30px rgba(224, 36, 12, 0.5);
 }
 @utility product-fill {
   background-image:
@@ -245,25 +239,26 @@
 /* ===== Componentes reutilizables (botones / chips) con @apply ===== */
 @layer components {
   .btn {
-    @apply inline-flex items-center gap-2.5 font-semibold text-[15px] px-6 py-3.5 rounded-[14px] cursor-pointer transition duration-200;
+    @apply inline-flex items-center justify-center gap-2.5 font-semibold text-[15px] px-6 py-3.5 rounded-none cursor-pointer transition-colors duration-200;
   }
   .btn-ic {
-    @apply inline-grid place-items-center w-[26px] h-[26px] rounded-lg bg-black/25 text-[13px];
+    @apply inline-grid place-items-center w-[26px] h-[26px] bg-black/20 text-[13px];
   }
+  /* CTA principal: negro con borde amarillo; hover se rellena de amarillo */
   .btn-primary {
-    @apply bg-amber-500 text-[#1a0a00] shadow-[0_10px_30px_-8px_rgba(245,158,11,.55)] hover:-translate-y-0.5 hover:bg-amber-400;
+    @apply bg-black text-accent border border-accent hover:bg-accent hover:text-black;
   }
   .btn-dark {
-    @apply bg-[#140a05] text-ink border border-amber-500 hover:bg-[#1d0f07];
+    @apply bg-black text-ink border border-line hover:border-accent hover:text-accent;
   }
   .btn-outline {
-    @apply bg-transparent text-ink border border-amber-500 px-[30px] py-[13px] rounded-xl hover:bg-amber-500 hover:text-[#1a0a00];
+    @apply bg-transparent text-ink border border-line px-[30px] py-[13px] hover:border-accent hover:text-accent;
   }
   .btn-sm {
     @apply px-5 py-[11px] text-sm;
   }
   .btn-xs {
-    @apply px-4 py-[9px] text-[13px] rounded-[10px];
+    @apply px-4 py-[9px] text-[13px];
   }
   .chip {
     @apply text-[11px] text-muted bg-panel border border-line px-2.5 py-[5px] rounded-full;

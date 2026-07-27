@@ -1,11 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { Minus, Plus, ShoppingCart, Trash2, X, ArrowUpRight } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
+function clp(n: number) {
+  return "$" + Math.round(n).toLocaleString("es-CL");
+}
+
 export default function CartDrawer() {
-  const { items, isOpen, closeCart, setQty, removeItem, total, count } =
-    useCart();
+  const { items, isOpen, closeCart, setQty, removeItem, total, count } = useCart();
 
   return (
     <>
@@ -17,65 +21,61 @@ export default function CartDrawer() {
       />
       <aside
         aria-hidden={!isOpen}
-        className={`fixed right-0 top-0 z-100 flex h-full w-[min(400px,92vw)] flex-col border-l border-line bg-black transition-transform duration-300 ${
+        className={`fixed right-0 top-0 z-100 flex h-full w-[min(400px,92vw)] flex-col border-l border-line bg-bg transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between border-b border-line p-5.5">
-          <h3 className="text-[18px] font-bold">Mi Carrito ({count})</h3>
+        <div className="flex items-center justify-between border-b border-line p-5">
+          <h3 className="flex items-center gap-2 text-[16px] font-semibold text-ink">
+            <ShoppingCart size={18} className="text-accent" />
+            Mi carrito ({count})
+          </h3>
           <button
             onClick={closeCart}
-            aria-label="close"
-            className="text-[22px]"
+            aria-label="Cerrar carrito"
+            className="grid h-8 w-8 place-items-center text-muted transition-colors hover:text-ink"
           >
-            ✕
+            <X size={18} />
           </button>
         </div>
 
-        <div className="flex flex-1 flex-col gap-1 overflow-y-auto px-[22px]">
+        <div className="flex flex-1 flex-col overflow-y-auto px-5">
           {items.length === 0 ? (
-            <p className="mt-10 text-center text-muted">Your cart is empty.</p>
+            <p className="mt-10 text-center text-sm text-muted">Tu carrito está vacío.</p>
           ) : (
             items.map((it) => (
-              <div key={it.slug} className="flex items-center gap-4 py-5">
+              <div key={it.slug} className="flex items-center gap-3 border-b border-line py-4">
                 <div
-                  className="h-16 w-16 shrink-0 rounded-[10px] product-fill"
-                  style={
-                    it.image
-                      ? {
-                          backgroundImage: `url(${it.image})`,
-                          backgroundSize: "cover",
-                        }
-                      : undefined
-                  }
+                  className="h-14 w-14 shrink-0 bg-panel bg-cover bg-center grayscale"
+                  style={it.image ? { backgroundImage: `url(${it.image})` } : undefined}
                 />
                 <div className="min-w-0 flex-1">
-                  <strong className="block truncate text-sm">{it.name}</strong>
-                  <span className="text-[13px] text-muted">
-                    ${it.price.toFixed(2)}
-                  </span>
+                  <strong className="block truncate text-sm text-ink">{it.name}</strong>
+                  <span className="text-[13px] tabular-nums text-muted">{clp(it.price)}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
                   <button
                     onClick={() => setQty(it.slug, it.qty - 1)}
-                    className="h-[26px] w-[26px] rounded-lg border border-line bg-panel text-[15px]"
+                    aria-label="Quitar uno"
+                    className="grid h-7 w-7 place-items-center border border-line text-accent transition-colors hover:bg-white/5"
                   >
-                    −
+                    <Minus size={14} />
                   </button>
-                  <span>{it.qty}</span>
+                  <span className="w-5 text-center text-sm tabular-nums text-ink">{it.qty}</span>
                   <button
                     onClick={() => setQty(it.slug, it.qty + 1)}
-                    className="h-[26px] w-[26px] rounded-lg border border-line bg-panel text-[15px]"
+                    aria-label="Agregar uno"
+                    className="grid h-7 w-7 place-items-center border border-line text-accent transition-colors hover:bg-white/5"
                   >
-                    +
+                    <Plus size={14} />
                   </button>
                 </div>
                 <button
                   onClick={() => removeItem(it.slug)}
-                  aria-label="remove"
-                  className="text-base text-muted"
+                  aria-label="Quitar del carrito"
+                  className="text-muted transition-colors hover:text-red-400"
                 >
-                  🗑
+                  <Trash2 size={16} />
                 </button>
               </div>
             ))
@@ -83,17 +83,13 @@ export default function CartDrawer() {
         </div>
 
         {items.length > 0 && (
-          <div className="flex flex-col gap-3.5 border-t border-line p-[22px]">
-            <div className="flex justify-between text-[17px] font-bold">
+          <div className="flex flex-col gap-4 border-t border-line p-5">
+            <div className="flex items-center justify-between text-[16px] font-semibold text-ink">
               <span>Total</span>
-              <span className="text-grad">${total.toFixed(2)}</span>
+              <span className="tabular-nums">{clp(total)}</span>
             </div>
-            <Link
-              href="/checkout"
-              onClick={closeCart}
-              className="btn btn-primary justify-center"
-            >
-              Checkout <span className="btn-ic">↗</span>
+            <Link href="/checkout" onClick={closeCart} className="btn btn-primary justify-center">
+              Ir a pagar <ArrowUpRight size={18} />
             </Link>
           </div>
         )}

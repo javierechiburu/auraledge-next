@@ -2,8 +2,16 @@ import Link from "next/link";
 import { Product } from "@/lib/types";
 import ProductMedia from "@/components/product/ProductMedia";
 import AddToCartButton from "@/components/shared/AddToCartButton";
+import AudioPreview from "@/components/shared/AudioPreview";
 
 export default function ProductDetail({ product }: { product: Product }) {
+  const meta = [
+    product.genre,
+    product.bpm ? `${product.bpm} BPM` : null,
+    product.musicalKey,
+    ...product.features,
+  ].filter(Boolean) as string[];
+
   return (
     <section className="mx-auto grid max-w-[1280px] items-center gap-[50px] px-6 pb-[70px] pt-32 lg:grid-cols-2">
       <div className="relative h-[460px] overflow-hidden rounded-[22px] product-fill shadow-glow after:absolute after:inset-0 after:bg-[radial-gradient(200px_260px_at_50%_60%,rgba(0,0,0,.7),transparent_70%)] after:content-['']">
@@ -21,8 +29,14 @@ export default function ProductDetail({ product }: { product: Product }) {
         </h1>
         <p className="mb-6 max-w-[480px] text-[15px] text-muted">{product.description}</p>
 
+        <AudioPreview
+          src={product.previewUrl}
+          maxSeconds={product.previewSeconds ?? 30}
+          className="mb-6 max-w-[480px] text-white"
+        />
+
         <div className="mb-6 flex flex-wrap gap-2">
-          {product.features.map((f) => (
+          {meta.map((f) => (
             <span key={f} className="chip">
               {f}
             </span>

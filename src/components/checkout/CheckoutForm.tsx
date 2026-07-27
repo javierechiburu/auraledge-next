@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowUpRight } from "lucide-react";
 import { Customer } from "@/lib/types";
 
 interface CheckoutFormProps {
@@ -25,9 +26,9 @@ export default function CheckoutForm({
         e.preventDefault();
         onSubmit();
       }}
-      className="space-y-6 rounded-[28px] border border-line bg-black p-8"
+      className="space-y-6 border border-line bg-card p-8"
     >
-      <h2 className="font-display text-xl normal-case">Datos de contacto</h2>
+      <h2 className="text-lg font-semibold text-ink">Datos de contacto</h2>
 
       <div>
         <label
@@ -41,7 +42,7 @@ export default function CheckoutForm({
           required
           value={customer.name}
           onChange={(e) => onChange({ ...customer, name: e.target.value })}
-          className="w-full rounded-xl border border-line bg-black px-4 py-3.5 text-sm text-ink"
+          className="w-full rounded-md border border-line bg-panel px-4 py-3.5 text-sm text-ink outline-none transition-colors focus:border-white/30"
           placeholder="Juan Pérez"
         />
       </div>
@@ -59,7 +60,7 @@ export default function CheckoutForm({
           required
           value={customer.email}
           onChange={(e) => onChange({ ...customer, email: e.target.value })}
-          className="w-full rounded-xl border border-line bg-black px-4 py-3.5 text-sm text-ink"
+          className="w-full rounded-md border border-line bg-panel px-4 py-3.5 text-sm text-ink outline-none transition-colors focus:border-white/30"
           placeholder="juan@email.com"
         />
       </div>
@@ -75,12 +76,12 @@ export default function CheckoutForm({
           id="phone"
           value={customer.phone ?? ""}
           onChange={(e) => onChange({ ...customer, phone: e.target.value })}
-          className="w-full rounded-xl border border-line bg-black px-4 py-3.5 text-sm text-ink"
+          className="w-full rounded-md border border-line bg-panel px-4 py-3.5 text-sm text-ink outline-none transition-colors focus:border-white/30"
           placeholder="+56 9 1234 5678"
         />
       </div>
 
-      {error && <p className="text-sm text-brand-2">{error}</p>}
+      {error && <p className="text-sm text-red-400">{error}</p>}
 
       <button
         type="submit"
@@ -88,7 +89,7 @@ export default function CheckoutForm({
         className="btn btn-primary w-full justify-center py-4 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading ? "Redirigiendo…" : "Pagar con Mercado Pago"}
-        {!loading && <span className="btn-ic">↗</span>}
+        {!loading && <ArrowUpRight size={18} />}
       </button>
     </form>
   );

@@ -8,44 +8,70 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const OFFSETS: Record<string, gsap.TweenVars> = {
-  right: { x: 80, y: 0 },
-  left: { x: -80, y: 0 },
-  up: { x: 0, y: 80 },
-  down: { x: 0, y: -80 },
+type Direction = "left" | "right" | "up" | "down";
+
+type ScrollRevealProps = {
+  children: React.ReactNode;
+  className?: string;
+
+  direction?: Direction;
+  distance?: number;
+
+  duration?: number;
+  delay?: number;
+  ease?: string;
+
+  start?: string;
+  toggleActions?: string;
+  once?: boolean;
 };
 
 export default function ScrollReveal({
   children,
-  direction = "up",
   className,
-}: {
-  children: React.ReactNode;
-  direction?: "right" | "left" | "up" | "down";
-  className?: string;
-}) {
+
+  direction = "up",
+  distance = 80,
+
+  duration = 1,
+  delay = 0,
+  ease = "power3.out",
+
+  start = "top 85%",
+  toggleActions = "play none none none",
+  once = true,
+}: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
+    const offsets: Record<Direction, gsap.TweenVars> = {
+      left: { x: -distance, y: 0 },
+      right: { x: distance, y: 0 },
+      up: { x: 0, y: distance },
+      down: { x: 0, y: -distance },
+    };
+
     const ctx = gsap.context(() => {
       gsap.from(el, {
-        ...OFFSETS[direction],
+        ...offsets[direction],
         opacity: 0,
-        duration: 1,
-        ease: "power3.out",
+        duration,
+        delay,
+        ease,
         scrollTrigger: {
           trigger: el,
-          start: "top 85%",
-          toggleActions: "play none none none",
+          start,
+          toggleActions,
+          once,
         },
       });
-    });
+    }, ref);
 
     return () => ctx.revert();
-  }, [direction]);
+  }, [direction, distance, duration, delay, ease, start, toggleActions, once]);
 
   return (
     <div ref={ref} className={className}>

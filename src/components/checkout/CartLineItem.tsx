@@ -1,6 +1,11 @@
 "use client";
 
+import { Minus, Plus, Trash2 } from "lucide-react";
 import { CartItem } from "@/lib/types";
+
+function clp(n: number) {
+  return "$" + Math.round(n).toLocaleString("es-CL");
+}
 
 export default function CartLineItem({
   item,
@@ -12,44 +17,44 @@ export default function CartLineItem({
   onRemove: () => void;
 }) {
   return (
-    <div className="flex items-center gap-6 py-6 first:pt-0 last:pb-0">
+    <div className="flex items-center gap-4 border-b border-line py-4 last:border-b-0">
       <div
-        className="h-20 w-20 flex-shrink-0 rounded-2xl product-fill"
-        style={
-          item.image ? { backgroundImage: `url(${item.image})`, backgroundSize: "cover" } : undefined
-        }
+        className="h-16 w-16 flex-shrink-0 bg-panel bg-cover bg-center grayscale"
+        style={item.image ? { backgroundImage: `url(${item.image})` } : undefined}
       />
       <div className="min-w-0 flex-1">
-        <strong className="block truncate text-[15px]">{item.name}</strong>
-        <span className="text-sm text-muted">${item.price.toFixed(2)}</span>
+        <strong className="block truncate text-[15px] text-ink">{item.name}</strong>
+        <span className="text-sm tabular-nums text-muted">{clp(item.price)}</span>
       </div>
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-2">
         <button
           type="button"
           onClick={() => onQtyChange(item.qty - 1)}
-          className="h-9 w-9 rounded-lg border border-line bg-panel text-base"
+          aria-label="Quitar uno"
+          className="grid h-8 w-8 place-items-center border border-line text-accent transition-colors hover:bg-white/5"
         >
-          −
+          <Minus size={15} />
         </button>
-        <span className="w-6 text-center">{item.qty}</span>
+        <span className="w-6 text-center tabular-nums text-ink">{item.qty}</span>
         <button
           type="button"
           onClick={() => onQtyChange(item.qty + 1)}
-          className="h-9 w-9 rounded-lg border border-line bg-panel text-base"
+          aria-label="Agregar uno"
+          className="grid h-8 w-8 place-items-center border border-line text-accent transition-colors hover:bg-white/5"
         >
-          +
+          <Plus size={15} />
         </button>
       </div>
-      <span className="hidden w-20 text-right font-semibold text-grad sm:block">
-        ${(item.price * item.qty).toFixed(2)}
+      <span className="hidden w-20 text-right text-sm font-semibold tabular-nums text-ink sm:block">
+        {clp(item.price * item.qty)}
       </span>
       <button
         type="button"
         onClick={onRemove}
         aria-label="Quitar del carrito"
-        className="text-muted transition-colors hover:text-brand-2"
+        className="text-muted transition-colors hover:text-red-400"
       >
-        🗑
+        <Trash2 size={17} />
       </button>
     </div>
   );

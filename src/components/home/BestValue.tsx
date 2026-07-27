@@ -6,13 +6,14 @@ import Link from "next/link";
 import { Product } from "@/lib/types";
 import { WAVEFORM } from "@/lib/waveform";
 import AddToCartButton from "@/components/shared/AddToCartButton";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 
 export default function BestValue({ product: s }: { product: Product }) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   if (!s) return null;
 
-  const [dollars, cents] = s.price.toFixed(2).split(".");
+  const [dollars] = s.price.toFixed(2).split(".");
 
   return (
     <section
@@ -26,50 +27,58 @@ export default function BestValue({ product: s }: { product: Product }) {
       <div className="relative p-0 z-1 md:p-8">
         <div className="relative overflow-hidden rounded-[32px] bg-amber p-[1.5px] shadow-[0_30px_80px_-30px_rgba(0,0,0,.8)] transition-transform duration-500 ease-out hover:scale-[1.01]">
           {/* Vinilo: ocupa todo el alto de la card y sangra por el borde derecho */}
-          <div className="pointer-events-none absolute inset-y-0 right-20 top-10 z-10 hidden aspect-video h-full -translate-y-1/2 translate-x-1/2 md:block">
-            <Image
-              src="/assets/vinilo.png"
-              alt={s.name}
-              width={900}
-              height={900}
-              sizes="900px"
-              style={{ animationPlayState: isPlaying ? "running" : "paused" }}
-              className="animate-spin-slow object-contain drop-shadow-[0_0_50px_rgba(255,176,32,.35)]"
-            />
-            <button
-              type="button"
-              onClick={() => setIsPlaying((p) => !p)}
-              aria-label={isPlaying ? "Pause preview" : "Play preview"}
-              aria-pressed={isPlaying}
-              className="pointer-events-auto absolute left-[45%] top-73 grid translate-y-1/2 cursor-pointer place-items-center"
-            >
-              <div
-                className={`grid h-16 w-16 place-items-center rounded-full bg-grad transition-transform duration-200 hover:scale-105 active:scale-95 ${
-                  isPlaying
-                    ? "animate-neon-pulse"
-                    : "shadow-[0_0_14px_2px_rgba(255,176,32,.4)]"
-                }`}
+          <ScrollReveal
+            direction="left"
+            distance={-580}
+            duration={1.2}
+            delay={0.5}
+            className="pointer-events-none absolute inset-y-0 right-20 top-10 z-10 hidden aspect-video h-full -translate-y-1/2 translate-x-1/2 md:block"
+          >
+            <>
+              <Image
+                src="/assets/vinilo.png"
+                alt={s.name}
+                width={900}
+                height={900}
+                sizes="900px"
+                style={{ animationPlayState: isPlaying ? "running" : "paused" }}
+                className="animate-spin-slow object-contain drop-shadow-[0_0_50px_rgba(255,176,32,.35)]"
+              />
+              <button
+                type="button"
+                onClick={() => setIsPlaying((p) => !p)}
+                aria-label={isPlaying ? "Pause preview" : "Play preview"}
+                aria-pressed={isPlaying}
+                className="pointer-events-auto absolute left-[45%] top-63 grid translate-y-1/2 cursor-pointer place-items-center"
               >
-                {isPlaying ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 fill-[#1a0a00]"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 fill-[#1a0a00]"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                )}
-              </div>
-            </button>
-          </div>
+                <div
+                  className={`grid h-16 w-16 place-items-center rounded-full bg-grad transition-transform duration-200 hover:scale-105 active:scale-95 ${
+                    isPlaying
+                      ? "animate-neon-pulse"
+                      : "shadow-[0_0_14px_2px_rgba(255,176,32,.4)]"
+                  }`}
+                >
+                  {isPlaying ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 fill-[#1a0a00]"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 fill-[#1a0a00]"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  )}
+                </div>
+              </button>
+            </>
+          </ScrollReveal>
 
           <div className="relative overflow-hidden rounded-[31px] p-6 pb-38 md:p-12">
             {/* Resplandores decorativos */}
@@ -103,9 +112,8 @@ export default function BestValue({ product: s }: { product: Product }) {
                 <div className="mt-0 flex items-center justify-center gap-4 md:mt-8 2xl:justify-start">
                   <span className="text-4xl font-bold text-white">
                     ${dollars}
-                    <sup className="text-lg text-amber">.{cents}</sup>
                   </span>
-                  <span className="rounded-full border border-amber/30 bg-amber/10 px-4 py-1 text-sm text-amber">
+                  <span className="rounded-full border border-amber/30 bg-amber/10 px-4 py-1 text-sm text-white">
                     {s.subtitle}
                   </span>
                 </div>

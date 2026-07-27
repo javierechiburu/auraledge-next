@@ -15,11 +15,11 @@ export default function BeatsGrid({
       </p>
 
       {products.length === 0 ? (
-        <div className="rounded-[22px] border border-line bg-card p-12 text-center text-muted">
+        <div className="border border-line bg-card p-12 text-center text-muted">
           No encontramos beats con esos filtros.
         </div>
       ) : (
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
           {products.map((p) => (
             <ProductCard key={p.slug} product={p} />
           ))}

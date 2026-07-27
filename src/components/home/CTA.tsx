@@ -1,34 +1,84 @@
 import Image from "next/image";
+import ScrollReveal from "../shared/ScrollReveal";
 
 export default function CTA() {
   return (
-    <section className="mx-auto max-w-[1280px] px-6 pb-20 pt-10">
-      <div className="scroll-reveal grid overflow-hidden rounded-[28px] bg-[linear-gradient(to_left,#000_0%,#7a0d00_75%,#c81a00_100%)] shadow-glow lg:grid-cols-[1.1fr_1fr]">
-        <div className="p-[46px] lg:px-[46px] lg:py-[54px]">
-          <h2 className="mb-4 text-[clamp(28px,3.6vw,42px)] font-extrabold leading-[1.1]">
-            Encuentra Tu Próximo Hit.
-            <br />
-            Siente Cada Beat.
-          </h2>
-          <p className="mb-[26px] max-w-[400px] text-[15px] text-[rgba(255,240,230,.85)]">
-            Explora una colección de pistas y beats originales — donde la
-            creatividad se encuentra con el ritmo, listos para tu próxima
-            producción.
-          </p>
-          <a href="#collection" className="btn btn-dark">
-            Explorar colección <span className="btn-ic">↗</span>
-          </a>
-        </div>
-        <div className="flex min-h-[220px] items-center justify-center bg-[radial-gradient(140px_140px_at_55%_45%,rgba(255,210,90,.7),transparent_60%),rgba(0,0,0,.35)] lg:min-h-[300px]">
-          <div className="relative aspect-5/6 w-48 overflow-hidden sm:w-56">
-            <Image
-              src="/assets/logo-bg.png"
-              alt="GENIOMUSIC logo"
-              fill
-              sizes="224px"
-              className="object-cover object-[center_56%] drop-shadow-[0_20px_60px_rgba(0,0,0,.6)]"
-            />
+    <section className="mx-auto max-w-[1280px] px-6 py-24">
+      <div className="relative overflow-visible">
+        <div className="relative overflow-visible rounded-[32px] bg-[linear-gradient(to_left,#000_0%,#7a0d00_75%,#c81a00_100%)] shadow-[0_25px_80px_rgba(0,0,0,.45)]">
+          <div className="grid min-h-[430px] items-center lg:grid-cols-[1.1fr_1fr]">
+            {/* Texto */}
+            <div className="relative z-20 px-10 py-14 lg:px-16">
+              <h2 className="mb-5 text-[clamp(34px,4vw,56px)] font-extrabold leading-tight">
+                Encuentra Tu
+                <br />
+                Próximo Hit.
+              </h2>
+
+              <p className="mb-8 max-w-md text-white/80 leading-7">
+                Explora una colección de pistas y beats originales para
+                productores, artistas y creadores que buscan un sonido único.
+              </p>
+
+              <a
+                href="#collection"
+                className="inline-flex items-center gap-3 rounded-xl bg-white px-6 py-3 font-semibold text-black transition hover:scale-105"
+              >
+                Explorar colección
+                <span>→</span>
+              </a>
+            </div>
+
+            <div />
           </div>
+
+          {/* Imagen que sobresale */}
+          <ScrollReveal
+            direction="down"
+            distance={-200}
+            duration={1.5}
+            className="
+              absolute
+              -right-38
+              -bottom-80
+              hidden
+              lg:block
+              w-[920px]
+              h-[1020px]
+            "
+          >
+            <div className="relative w-full h-full">
+              {/* Sombra con la misma silueta */}
+              <Image
+                src="/assets/logo-bg.png"
+                alt=""
+                fill
+                aria-hidden
+                className="
+                  object-contain
+                  brightness-0
+                  opacity-100
+                  scale-105
+                  translate-x-5
+                  translate-y-5
+                  z-0
+                "
+              />
+
+              {/* Imagen principal */}
+              <Image
+                src="/assets/logo-bg.png"
+                alt="GENIOMUSIC"
+                fill
+                priority
+                className="
+                  object-contain
+                  relative
+                  z-10
+                "
+              />
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

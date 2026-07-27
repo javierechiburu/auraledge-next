@@ -1,129 +1,98 @@
-# Integración con Strapi
+# Integración con Strapi (backend `../cms`)
 
-Esta guía describe los **content-types** que debes crear en Strapi para que el
-frontend consuma datos reales. Mientras Strapi no esté disponible, el sitio usa
-datos mock (`src/lib/mock-data.ts`) automáticamente, así que puedes desarrollar
-sin backend.
+El backend vive en `geniomusic/cms` (Strapi 5, TypeScript). Los **content-types
+ya están definidos como código** (no hay que crearlos a mano en el admin) y los
+permisos públicos de lectura se otorgan solos al arrancar (ver
+`cms/src/index.ts`). Mientras Strapi no esté disponible, el frontend usa datos
+mock (`src/lib/mock-data.ts`) automáticamente.
 
-## 1. Levantar Strapi
+## 1. Levantar Strapi en local
 
 ```bash
-npx create-strapi-app@latest auraledge-cms --quickstart
+cd ../cms
+npm run develop
 ```
 
-Corre en `http://localhost:1337`. Crea tu usuario admin.
+Corre en `http://localhost:1337`. La primera vez, entra a
+`http://localhost:1337/admin` y **crea tu usuario administrador**.
 
-## 2. Content-Type: **Product** (Collection Type)
+> Si ves `SqliteError: unable to open database file`, asegúrate de que en
+> `cms/.env` la variable `DATABASE_FILENAME=.tmp/data.db` no esté vacía.
 
-| Campo            | Tipo                 | Notas                                    |
-|------------------|----------------------|------------------------------------------|
-| `name`           | Text (short)         | Requerido                                |
-| `slug`           | UID (target: name)   | Requerido, único                         |
-| `subtitle`       | Text (short)         |                                          |
-| `description`    | Text (long)          |                                          |
-| `price`          | Decimal              | Requerido                                |
-| `compareAtPrice` | Decimal              | Precio tachado (opcional)                |
-| `tag`            | Text (short)         | Ej: "Best Seller", "New"                 |
-| `badge`          | Text (short)         | Ej: "-30%"                               |
-| `features`       | JSON                 | Array de strings: `["40h","ANC"]`        |
-| `batteryHours`   | Integer              |                                          |
-| `noiseCancelling`| Integer              | Porcentaje (0-100)                       |
-| `bestValue`      | Boolean              | Aparece en el carrusel "Best Value"      |
-| `highlight`      | Boolean              | Producto destacado del Hero/Highlight    |
-| `image`          | Media (single)       | Imagen del producto                      |
+## 2. Content-Types (ya creados en código)
 
-> Si prefieres no usar el tipo JSON para `features`, puedes usar un Text corto
-> con valores separados por coma (`40h, ANC, Fast Charge`); el frontend soporta
-> ambos formatos.
+### Product — `cms/src/api/product/content-types/product/schema.json`
+Pista musical (producto digital):
 
-## 3. Content-Type: **Testimonial** (Collection Type)
+| Campo             | Tipo            | Notas                                             |
+|-------------------|-----------------|---------------------------------------------------|
+| `name`            | string (req)    | Título de la pista                                |
+| `slug`            | uid (req)       | Único, deriva de `name`                           |
+| `subtitle`        | string          |                                                   |
+| `description`     | text            |                                                   |
+| `price`           | decimal (req)   | En CLP (entero, p. ej. 12990)                     |
+| `compareAtPrice`  | decimal         | Precio tachado (opcional)                         |
+| `genre`           | string          | Trap, Reggaetón, Drill…                           |
+| `bpm`             | integer         | Tempo                                             |
+| `musicalKey`      | string          | Tonalidad (Am, C#m…)                              |
+| `durationSeconds` | integer         | Duración total                                    |
+| `previewSeconds`  | integer (def 30)| Segundos de preview permitidos                    |
+| `tag` / `badge`   | string          | Etiquetas visuales                                |
+| `features`        | json            | Array de strings (`["WAV + MP3", "Stems"]`)       |
+| `bestValue`       | boolean         |                                                   |
+| `highlight`       | boolean         |                                                   |
+| `image`           | media (imagen)  | Portada                                           |
+| `previewClip`     | media (audio)   | **PÚBLICO**: clip de preview de pocos segundos    |
+| `fullTrack`       | media (audio)   | **PRIVADO** (`private: true`): pista completa     |
 
-| Campo    | Tipo           | Notas                    |
-|----------|----------------|--------------------------|
-| `name`   | Text (short)   | Requerido                |
-| `role`   | Text (short)   | Ej: "Producer"           |
-| `quote`  | Text (long)    | Requerido                |
-| `rating` | Integer        | 1-5                      |
-| `avatar` | Media (single) | Foto del cliente         |
+> **Importante:** subes DOS archivos por pista: el `previewClip` (recortado a
+> los segundos que quieras mostrar) y el `fullTrack` (la pista completa que solo
+> se entrega tras el pago). El `fullTrack` es un campo privado: no se expone en
+> la API pública; solo se lee desde el servidor con el API token.
 
-## 4. Content-Type: **Order** (Collection Type)
+### Order — `cms/src/api/order/content-types/order/schema.json`
 
-| Campo           | Tipo                 | Notas                                          |
-|-----------------|----------------------|-------------------------------------------------|
-| `items`         | JSON                 | Array de `{ slug, name, price, qty, image }`     |
-| `customer`      | JSON                 | `{ name, email, phone }`                         |
-| `total`         | Decimal              | Requerido                                        |
-| `status`        | Enumeration           | `pending`, `approved`, `rejected`, `cancelled`   |
-| `mpPreferenceId`| Text (short)         | Id de la preferencia de Mercado Pago             |
-| `mpPaymentId`   | Text (short)         | Id del pago aprobado por Mercado Pago            |
+| Campo            | Tipo         | Notas                                          |
+|------------------|--------------|------------------------------------------------|
+| `items`          | json (req)   | `[{ slug, name, price, qty, image }]`          |
+| `customer`       | json (req)   | `{ name, email, phone }`                        |
+| `total`          | decimal (req)| Calculado en el servidor                        |
+| `status`         | enum (req)   | `pending`/`approved`/`rejected`/`cancelled`     |
+| `mpPreferenceId` | string       | Id de preferencia de Mercado Pago               |
+| `mpPaymentId`    | string       | Id del pago                                     |
+| `fulfilledAt`    | datetime     | Marca de entrega (idempotencia del correo)      |
 
-**Permisos**: habilita `create` y `update` para `Order` en el rol que uses (Public si no hay
-`STRAPI_API_TOKEN`, o el token de API si usas uno). El frontend crea la orden en
-`POST /api/orders` (dentro de este content-type) al iniciar el checkout, y la actualiza cuando
-llega la notificación de pago.
+Las órdenes **no son públicas**: se crean/actualizan solo con el API token del
+servidor (nunca desde el navegador).
 
-## 5. Permisos (endpoints públicos)
+## 3. Permisos
 
-**Settings → Users & Permissions → Roles → Public** → habilita `find` y
-`findOne` para `Product` y `Testimonial`.
+- **Lectura de pistas (público):** `product.find` y `product.findOne` se
+  habilitan automáticamente en el rol *Public* al arrancar (`cms/src/index.ts`).
+- **Órdenes y archivo privado:** requieren un **API Token** de tipo *Full
+  access*. Créalo en **Settings → API Tokens** y ponlo en el `.env.local` del
+  frontend como `STRAPI_API_TOKEN`.
 
-Si prefieres endpoints protegidos, crea un **API Token**
-(Settings → API Tokens, tipo *Read-only*) y ponlo en `.env.local` como
-`STRAPI_API_TOKEN`. El frontend lo enviará como `Authorization: Bearer`.
+## 4. Variables de entorno del frontend
 
-## 6. Variables de entorno del frontend
+Copia `.env.example` a `.env.local` y completa (ver ese archivo para la lista
+completa y comentada): `NEXT_PUBLIC_STRAPI_URL`, `STRAPI_API_TOKEN`,
+`NEXT_PUBLIC_SITE_URL`, `MP_ACCESS_TOKEN`, `MP_WEBHOOK_SECRET`,
+`DOWNLOAD_TOKEN_SECRET`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`.
 
-Copia `.env.example` a `.env.local`:
+## 5. Flujo de compra y entrega digital
 
-```env
-NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
-STRAPI_API_TOKEN=              # opcional
+1. `/checkout` → `POST /api/checkout`. **El servidor ignora los precios del
+   cliente** y los reconstruye desde Strapi por `slug` (`buildVerifiedCart`).
+2. Crea la orden (`createOrder`) y una **preferencia** de Mercado Pago
+   (`external_reference = order.id`). Redirige a Checkout Pro.
+3. Mercado Pago notifica a `/api/webhooks/mercadopago`. El handler **valida la
+   firma HMAC** (`MP_WEBHOOK_SECRET`), consulta el pago real y actualiza la orden.
+4. Si el pago está **aprobado** y la orden no se había entregado, se generan
+   **links de descarga firmados** (`DOWNLOAD_TOKEN_SECRET`, expiran en 7 días) y
+   se envía el correo con **Resend**. Se marca `fulfilledAt` (idempotente).
+5. La descarga pasa por `/api/download/[slug]`: verifica token + que la orden
+   esté pagada y contenga ese slug, y **transmite el `fullTrack` privado sin
+   exponer su URL**.
 
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-MP_ACCESS_TOKEN=               # requerido para que /api/checkout funcione
-NEXT_PUBLIC_MP_PUBLIC_KEY=     # opcional, solo si se usan Bricks en el cliente
-```
-
-## 7. Cómo consume los datos el frontend
-
-- `src/lib/api/strapi.ts` — cliente con `getProducts()`, `getProductBySlug()`,
-  `createOrder()`, `updateOrder()`. Normaliza respuestas de Strapi **v4**
-  (`{id, attributes}`) y **v5** (plano), y las URLs de media a absolutas.
-- `src/app/api/*` — Route Handlers de Next.js que exponen una capa propia
-  (`/api/products`, `/api/products/[slug]`, `/api/orders`, `/api/checkout`,
-  `/api/webhooks/mercadopago`), usadas por los Client Components (checkout) y
-  cualquier otro consumidor, sin exponer `STRAPI_API_TOKEN` al navegador.
-- Si Strapi no responde (o devuelve vacío), cae en los datos mock, de modo que la
-  UI nunca se rompe. Lo mismo para `createOrder()`: si Strapi no tiene el
-  content-type `Order` todavía, genera un id local y el checkout sigue
-  funcionando (la orden simplemente no queda persistida).
-- Usa **ISR** con `revalidate: 60` (revalida cada 60s). Cámbialo a
-  `cache: "no-store"` en `strapiFetch` si necesitas datos siempre frescos.
-
-## 8. Endpoints usados
-
-```
-GET  /api/products?populate=image&pagination[pageSize]=100
-GET  /api/products?filters[slug][$eq]=<slug>&populate=image
-GET  /api/testimonials?populate=avatar&pagination[pageSize]=50
-POST /api/orders
-PUT  /api/orders/:id
-```
-
-## 9. Integración con Mercado Pago
-
-El flujo de pago vive enteramente en Next.js (`src/lib/api/mercadopago.ts` +
-`src/app/api/checkout/route.ts` y `src/app/api/webhooks/mercadopago/route.ts`),
-usando el SDK oficial `mercadopago` (Node, v2 de la API):
-
-1. El usuario completa sus datos en `/checkout` → `POST /api/checkout`.
-2. La ruta crea la orden en Strapi (`createOrder`) y luego una **preferencia**
-   de pago (`createPreference`), enviando `external_reference: order.id`.
-3. El cliente redirige a `init_point` (Checkout Pro de Mercado Pago).
-4. Mercado Pago notifica el resultado a `notification_url`
-   (`/api/webhooks/mercadopago`); ese handler consulta el pago y actualiza la
-   orden en Strapi (`updateOrder`) con `status` y `mpPaymentId`.
-
-Si `MP_ACCESS_TOKEN` no está configurado, `/api/checkout` responde `501` con un
-mensaje claro en vez de fallar de forma silenciosa — el checkout queda
-"preparado" pero inactivo hasta que se cargue la credencial real.
+Ver `DEPLOY.md` para el despliegue en producción (Vercel + Railway/Supabase + R2).

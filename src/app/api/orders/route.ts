@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
-import { createOrder } from "@/lib/api/strapi";
-import { CheckoutPayload } from "@/lib/types";
 
-export async function POST(request: Request) {
-  const body = (await request.json().catch(() => null)) as CheckoutPayload | null;
-
-  if (!body?.items?.length || !body.customer?.name || !body.customer?.email) {
-    return NextResponse.json({ error: "Payload de orden inválido" }, { status: 400 });
-  }
-
-  const order = await createOrder(body.items, body.customer);
-  return NextResponse.json(order);
+/**
+ * Endpoint deshabilitado por seguridad.
+ *
+ * Antes creaba órdenes en Strapi con datos totalmente controlados por el cliente
+ * (incluido el precio) y sin autenticación. Las órdenes ahora se crean solo desde
+ * `/api/checkout`, con precios verificados en el servidor. Se deja este handler
+ * devolviendo 410 para no romper URLs cacheadas.
+ */
+export async function POST() {
+  return NextResponse.json(
+    { error: "Endpoint no disponible. Usa /api/checkout." },
+    { status: 410 }
+  );
 }

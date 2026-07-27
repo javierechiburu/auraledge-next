@@ -11,14 +11,14 @@ export default async function BeatsPage() {
   const products = await getProducts();
 
   return (
-    <main className="pt-32 bg-black">
+    <main className="pt-32 bg-bg">
       <div className="mx-auto max-w-[1280px] px-6 pb-10">
-        <h2 className="font-display text-[clamp(28px,4vw,44px)] normal-case">
-          Explora todos los <span className="text-grad">Beats</span>
-        </h2>
+        <h1 className="text-[clamp(26px,3.4vw,40px)] font-semibold tracking-tight text-ink">
+          Beats
+        </h1>
         <p className="mt-2 max-w-xl text-[15px] text-muted">
-          Filtra por precio, categoría y promoción para encontrar tu próximo
-          hit.
+          Explora la colección. Filtra por precio, categoría y promoción para
+          encontrar tu próximo hit.
         </p>
       </div>
       <BeatsExplorer products={products} />

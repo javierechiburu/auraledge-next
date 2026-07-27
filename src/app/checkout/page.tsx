@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { apiPost, ApiError } from "@/lib/http";
 import { Customer, MPPreferenceResponse } from "@/lib/types";
 import CartSummary from "@/components/checkout/CartSummary";
@@ -11,6 +12,7 @@ import MercadoPagoNotice from "@/components/checkout/MercadoPagoNotice";
 
 export default function CheckoutPage() {
   const { items, total, setQty, removeItem } = useCart();
+  const { user } = useAuth();
   const [customer, setCustomer] = useState<Customer>({
     name: "",
     email: "",
@@ -18,6 +20,13 @@ export default function CheckoutPage() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Precompleta el correo con el de la sesión (si el usuario no lo cambió).
+  useEffect(() => {
+    if (user?.email) {
+      setCustomer((c) => (c.email ? c : { ...c, email: user.email }));
+    }
+  }, [user]);
 
   async function handleSubmit() {
     setLoading(true);
@@ -43,9 +52,9 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <main className="min-h-screen bg-black pb-20 pt-40 text-center">
+      <main className="min-h-screen bg-bg pb-20 pt-40 text-center">
         <div className="mx-auto max-w-160 px-6">
-          <h1 className="font-display text-3xl normal-case">
+          <h1 className="text-3xl font-semibold tracking-tight text-ink">
             Tu carrito está vacío
           </h1>
           <p className="mt-3 text-muted">
@@ -60,10 +69,10 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black pb-24 pt-32">
+    <main className="min-h-screen bg-bg pb-24 pt-32">
       <div className="mx-auto max-w-290 px-6">
         <div className="mb-12">
-          <h1 className="font-display text-[clamp(30px,4vw,46px)] normal-case">
+          <h1 className="text-[clamp(28px,3.4vw,40px)] font-semibold tracking-tight text-ink">
             Checkout
           </h1>
           <p className="mt-3 max-w-lg text-[15px] text-muted">

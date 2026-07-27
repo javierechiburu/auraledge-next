@@ -13,8 +13,8 @@ export default function CartSummary({
   onRemove: (slug: string) => void;
 }) {
   return (
-    <div className="space-y-6 rounded-[28px] border border-line bg-black p-8">
-      <h2 className="font-display text-xl normal-case">Tu carrito</h2>
+    <div className="space-y-6 border border-line bg-card p-8">
+      <h2 className="text-lg font-semibold text-ink">Tu carrito</h2>
 
       <div className="flex flex-col gap-2">
         {items.map((item) => (
@@ -27,9 +27,9 @@ export default function CartSummary({
         ))}
       </div>
 
-      <div className="flex items-center justify-between border-t border-line pt-6 text-xl font-bold">
+      <div className="flex items-center justify-between border-t border-line pt-6 text-lg font-semibold text-ink">
         <span>Total</span>
-        <span className="text-grad">${total.toFixed(2)}</span>
+        <span className="tabular-nums">${Math.round(total).toLocaleString("es-CL")}</span>
       </div>
     </div>
   );

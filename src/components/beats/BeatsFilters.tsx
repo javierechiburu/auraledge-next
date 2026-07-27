@@ -41,13 +41,13 @@ export default function BeatsFilters({
   onReset,
 }: BeatsFiltersProps) {
   return (
-    <aside className="h-fit space-y-7 rounded-[22px] border-2 border-amber/50 bg-black p-6 lg:sticky lg:top-28">
+    <aside className="h-fit space-y-7 border border-line bg-card p-6 lg:sticky lg:top-28">
       <div className="flex items-center justify-between">
-        <h2 className="font-display text-lg normal-case">Filtros</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-ink">Filtros</h2>
         <button
           type="button"
           onClick={onReset}
-          className="cursor-pointer text-xs text-muted transition-colors hover:text-brand"
+          className="cursor-pointer text-xs text-muted transition-colors hover:text-ink"
         >
           Limpiar
         </button>
@@ -61,7 +61,7 @@ export default function BeatsFilters({
           id="sort"
           value={sort}
           onChange={(e) => onSortChange(e.target.value as SortOption)}
-          className="w-full rounded-xl border border-amber/30 bg-black px-3 py-2.5 text-sm text-ink"
+          className="w-full rounded-md border border-line bg-panel px-3 py-2.5 text-sm text-ink outline-none focus:border-white/30"
         >
           <option value="relevance">Relevancia</option>
           <option value="price-asc">Precio: menor a mayor</option>
@@ -80,7 +80,7 @@ export default function BeatsFilters({
             max={priceRange[1]}
             value={priceRange[0]}
             onChange={(e) => onPriceRangeChange([Number(e.target.value), priceRange[1]])}
-            className="w-full rounded-xl border border-amber/30 bg-black px-3 py-2 text-sm text-ink"
+            className="w-full rounded-md border border-line bg-panel px-3 py-2 text-sm text-ink outline-none focus:border-white/30"
           />
           <span className="text-muted">–</span>
           <input
@@ -90,7 +90,7 @@ export default function BeatsFilters({
             max={priceBounds.max}
             value={priceRange[1]}
             onChange={(e) => onPriceRangeChange([priceRange[0], Number(e.target.value)])}
-            className="w-full rounded-xl border border-amber/30 bg-black px-3 py-2 text-sm text-ink"
+            className="w-full rounded-md border border-line bg-panel px-3 py-2 text-sm text-ink outline-none focus:border-white/30"
           />
         </div>
         <input
@@ -100,7 +100,7 @@ export default function BeatsFilters({
           max={priceBounds.max}
           value={priceRange[1]}
           onChange={(e) => onPriceRangeChange([priceRange[0], Number(e.target.value)])}
-          className="mt-3 w-full accent-amber"
+          className="mt-3 w-full accent-white"
         />
       </div>
 
@@ -113,8 +113,10 @@ export default function BeatsFilters({
                 key={tag}
                 type="button"
                 onClick={() => onTagsChange(toggle(selectedTags, tag))}
-                className={`chip cursor-pointer border-amber/30 bg-black transition-colors ${
-                  selectedTags.includes(tag) ? "border-amber bg-amber/10 text-amber" : ""
+                className={`chip cursor-pointer rounded-md transition-colors ${
+                  selectedTags.includes(tag)
+                    ? "border-white/40 bg-white/10 text-ink"
+                    : "hover:border-white/25"
                 }`}
               >
                 {tag}
@@ -133,8 +135,10 @@ export default function BeatsFilters({
                 key={badge}
                 type="button"
                 onClick={() => onBadgesChange(toggle(selectedBadges, badge))}
-                className={`chip cursor-pointer border-amber/30 bg-black transition-colors ${
-                  selectedBadges.includes(badge) ? "border-amber bg-amber/10 text-amber" : ""
+                className={`chip cursor-pointer rounded-md transition-colors ${
+                  selectedBadges.includes(badge)
+                    ? "border-white/40 bg-white/10 text-ink"
+                    : "hover:border-white/25"
                 }`}
               >
                 {badge}

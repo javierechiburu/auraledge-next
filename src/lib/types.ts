@@ -17,8 +17,18 @@ export interface Product {
   tag?: string | null;
   badge?: string | null;
   features: string[];
-  batteryHours?: number | null;
-  noiseCancelling?: number | null;
+  /** Género musical (Trap, Reggaetón, Drill…). */
+  genre?: string | null;
+  /** Tempo en BPM. */
+  bpm?: number | null;
+  /** Tonalidad (Am, C#…). */
+  musicalKey?: string | null;
+  /** Duración total de la pista en segundos. */
+  durationSeconds?: number | null;
+  /** Segundos de preview permitidos (fallback si el clip no está pre-cortado). */
+  previewSeconds?: number | null;
+  /** URL pública del clip de preview (audio). Nunca la pista completa. */
+  previewUrl?: string | null;
   bestValue?: boolean;
   highlight?: boolean;
   image?: StrapiImage | null;
@@ -48,6 +58,12 @@ export interface Order {
   status: OrderStatus;
   mpPreferenceId?: string | null;
   mpPaymentId?: string | null;
+  /** ISO timestamp del momento en que se envió el correo de descarga. Idempotencia. */
+  fulfilledAt?: string | null;
+  /** Monto neto recibido tras comisiones de Mercado Pago. */
+  netAmount?: number | null;
+  /** Comisión total cobrada por Mercado Pago. */
+  mpFee?: number | null;
 }
 
 export interface CheckoutPayload {
@@ -55,7 +71,37 @@ export interface CheckoutPayload {
   customer: Customer;
 }
 
+export interface AuthUser {
+  id: number;
+  username: string;
+  email: string;
+  /** Calculado en el servidor a partir de ADMIN_EMAILS. */
+  isAdmin?: boolean;
+}
+
+/** Orden tal como se muestra en el perfil, con links de descarga si está pagada. */
+export interface UserOrder {
+  id: string;
+  documentId?: string;
+  items: CartItem[];
+  total: number;
+  status: OrderStatus;
+  createdAt?: string;
+  /** Presente solo si la orden está `approved`: { slug -> url firmada }. */
+  downloads?: { slug: string; name: string; url: string }[];
+}
+
 export interface MPPreferenceResponse {
   orderId: string;
   init_point: string;
+}
+
+export interface SalesStats {
+  grossRevenue: number;
+  netRevenue: number;
+  fees: number;
+  salesCount: number;
+  avgTicket: number;
+  monthly: { month: string; revenue: number }[];
+  topBeats: { slug: string; name: string; revenue: number; qty: number }[];
 }

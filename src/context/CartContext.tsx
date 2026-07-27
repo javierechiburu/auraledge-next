@@ -50,7 +50,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       return [...prev, { ...item, qty }];
     });
-    setIsOpen(true);
+    // No se abre el carrito automáticamente al agregar; solo se actualiza el contador.
   }
 
   function removeItem(slug: string) {
