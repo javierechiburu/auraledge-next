@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { ShoppingCart, ArrowLeft } from "lucide-react";
 import { Product } from "@/lib/types";
-import ProductMedia from "@/components/product/ProductMedia";
 import AddToCartButton from "@/components/shared/AddToCartButton";
 import AudioPreview from "@/components/shared/AudioPreview";
 
@@ -30,10 +29,6 @@ export default function ProductDetail({ product }: { product: Product }) {
           className="object-cover opacity-90 grayscale"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        <ProductMedia
-          image={product.image}
-          sizes="(max-width:960px) 100vw, 600px"
-        />
       </div>
 
       {/* Info */}

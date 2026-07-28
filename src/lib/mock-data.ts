@@ -25,7 +25,6 @@ export const mockProducts: Product[] = [
     category: "Plantillas mezcla beats",
     bestValue: true,
     highlight: true,
-    image: null,
   },
   {
     id: 2,
@@ -48,7 +47,6 @@ export const mockProducts: Product[] = [
     category: "Plantillas vocales",
     bestValue: true,
     highlight: false,
-    image: null,
   },
   {
     id: 3,
@@ -71,7 +69,6 @@ export const mockProducts: Product[] = [
     category: "Plantillas masterización",
     bestValue: false,
     highlight: false,
-    image: null,
   },
   {
     id: 4,
@@ -94,7 +91,6 @@ export const mockProducts: Product[] = [
     category: "Plantillas mezcla beats",
     bestValue: true,
     highlight: false,
-    image: null,
   },
   {
     id: 5,
@@ -117,6 +113,5 @@ export const mockProducts: Product[] = [
     category: "Plantillas vocales",
     bestValue: false,
     highlight: false,
-    image: null,
   },
 ];

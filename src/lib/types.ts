@@ -1,10 +1,3 @@
-export interface StrapiImage {
-  url: string;
-  alternativeText?: string | null;
-  width?: number;
-  height?: number;
-}
-
 export interface Product {
   id: number;
   documentId?: string;
@@ -33,7 +26,6 @@ export interface Product {
   previewUrl?: string | null;
   bestValue?: boolean;
   highlight?: boolean;
-  image?: StrapiImage | null;
 }
 
 export interface CartItem {

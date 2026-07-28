@@ -1,5 +1,6 @@
-import { CartItem, Customer, Order, Product, StrapiImage } from "../types";
+import { CartItem, Customer, Order, Product } from "../types";
 import { mockProducts } from "../mock-data";
+import { DOWNLOAD_URL_TTL, MEDIA_URL_TTL, presignR2 } from "./r2";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 const TOKEN = process.env.STRAPI_API_TOKEN;
@@ -27,19 +28,6 @@ function normalizeMedia(media: unknown): MediaAttrs | null {
   if (!m) return null;
   const attrs: MediaAttrs = m.data?.attributes ?? m;
   return attrs.url ? attrs : null;
-}
-
-/** Normaliza un campo media que puede venir en formato Strapi v4 o v5. */
-function normalizeImage(media: StrapiMedia): StrapiImage | null {
-  if (!media) return null;
-  const attrs: MediaAttrs = media.data?.attributes ?? media;
-  if (!attrs.url) return null;
-  return {
-    url: mediaUrl(attrs.url) as string,
-    alternativeText: attrs.alternativeText ?? null,
-    width: attrs.width,
-    height: attrs.height,
-  };
 }
 
 /** Aplana una entidad de Strapi (soporta v4 `{id, attributes}` y v5 plano). */
@@ -70,8 +58,16 @@ interface StrapiList<T> {
   data: T[];
 }
 
-function mapProduct(raw: Record<string, unknown>): Product {
+async function mapProduct(raw: Record<string, unknown>): Promise<Product> {
   const p = flatten(raw);
+
+  // Bucket R2 privado: el preview (audio) se firma con URL temporal. Si Strapi
+  // sirve desde disco local (dev) o no es R2, presignR2 devuelve la URL tal cual.
+  const rawPreviewUrl = normalizeMedia(p.previewClip)?.url
+    ? (mediaUrl(normalizeMedia(p.previewClip)!.url) as string)
+    : null;
+  const previewUrl = await presignR2(rawPreviewUrl, { expiresIn: MEDIA_URL_TTL });
+
   return {
     id: (p.id as number) ?? 0,
     documentId: p.documentId as string | undefined,
@@ -94,26 +90,23 @@ function mapProduct(raw: Record<string, unknown>): Product {
     musicalKey: (p.musicalKey as string) ?? null,
     durationSeconds: p.durationSeconds != null ? Number(p.durationSeconds) : null,
     previewSeconds: p.previewSeconds != null ? Number(p.previewSeconds) : null,
-    previewUrl: normalizeMedia(p.previewClip)?.url
-      ? (mediaUrl(normalizeMedia(p.previewClip)!.url) as string)
-      : null,
+    previewUrl,
     bestValue: Boolean(p.bestValue),
     highlight: Boolean(p.highlight),
-    image: normalizeImage(p.image as StrapiMedia),
   };
 }
 
 export async function getProducts(): Promise<Product[]> {
   const json = await strapiFetch<StrapiList<Record<string, unknown>>>(
-    "/products?populate[image]=true&populate[previewClip]=true&pagination[pageSize]=100"
+    "/products?populate[previewClip]=true&pagination[pageSize]=100"
   );
   if (!json?.data?.length) return mockProducts;
-  return json.data.map(mapProduct);
+  return Promise.all(json.data.map(mapProduct));
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   const json = await strapiFetch<StrapiList<Record<string, unknown>>>(
-    `/products?filters[slug][$eq]=${encodeURIComponent(slug)}&populate[image]=true&populate[previewClip]=true`
+    `/products?filters[slug][$eq]=${encodeURIComponent(slug)}&populate[previewClip]=true`
   );
   if (json?.data?.length) return mapProduct(json.data[0]);
   return mockProducts.find((p) => p.slug === slug) ?? null;
@@ -147,7 +140,6 @@ export async function buildVerifiedCart(
       slug: product.slug,
       name: product.name,
       price: product.price, // precio autoritativo del servidor
-      image: product.image?.url ?? null,
       qty,
     });
   }

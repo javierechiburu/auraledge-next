@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyDownloadToken } from "@/lib/api/download-token";
 import { getOrder, getTrackFullFile } from "@/lib/api/strapi";
+import { DOWNLOAD_URL_TTL, presignR2 } from "@/lib/api/r2";
 
 /**
  * Descarga protegida de la pista COMPLETA.
@@ -45,8 +46,11 @@ export async function GET(
     return NextResponse.json({ error: "Archivo no disponible." }, { status: 404 });
   }
 
-  // Stream del archivo privado a través de nuestro servidor (oculta la URL real).
-  const upstream = await fetch(file.url, { cache: "no-store" });
+  // Bucket R2 privado: firmamos una URL de corta duración (5 min) para poder
+  // leer el objeto. En dev con disco local de Strapi, presignR2 devuelve la URL
+  // tal cual. Luego se transmite (stream) al cliente SIN exponer la URL firmada.
+  const signedUrl = (await presignR2(file.url, { expiresIn: DOWNLOAD_URL_TTL })) ?? file.url;
+  const upstream = await fetch(signedUrl, { cache: "no-store" });
   if (!upstream.ok || !upstream.body) {
     return NextResponse.json({ error: "No se pudo obtener el archivo." }, { status: 502 });
   }

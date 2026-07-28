@@ -54,6 +54,11 @@ const remotePatterns = [
   { protocol, hostname, port: protocol === "http" ? "1337" : "", pathname: "/**" },
   { protocol: "https", hostname: "**.strapiapp.com", pathname: "/**" },
   { protocol: "https", hostname: "**.media.strapiapp.com", pathname: "/**" },
+  // Cloudflare R2: la media se sirve con URLs firmadas desde el endpoint S3 del
+  // bucket privado (https://<account-id>.r2.cloudflarestorage.com/...). El '*'
+  // cubre cualquier account-id. Se omite `search` para permitir el query string
+  // de la firma (X-Amz-*).
+  { protocol: "https", hostname: "*.r2.cloudflarestorage.com", pathname: "/**" },
 ];
 
 if (process.env.NEXT_PUBLIC_MEDIA_HOSTNAME) {
