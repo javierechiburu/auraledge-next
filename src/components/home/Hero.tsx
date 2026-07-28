@@ -32,38 +32,6 @@ export default function Hero() {
 
       {/* Barra inferior: rating · clientes · explorar (apilada, sin solaparse) */}
       <div className="absolute inset-x-0 bottom-0 z-[4]">
-        <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-5 md:px-10">
-          {/* Rating */}
-          <div className="flex items-center gap-3">
-            <span className="text-[clamp(22px,4vw,32px)] font-extrabold leading-none">
-              5.0
-            </span>
-            <div>
-              <div className="text-sm tracking-[2px] text-amber">★★★★★</div>
-              <div className="mt-1 flex items-center">
-                <span className="h-6 w-6 rounded-full border-2 border-bg bg-grad" />
-                <span className="-ml-2 h-6 w-6 rounded-full border-2 border-bg bg-grad" />
-                <span className="-ml-2 h-6 w-6 rounded-full border-2 border-bg bg-grad" />
-                <span className="-ml-2 grid h-6 w-6 place-items-center rounded-full border-2 border-bg bg-grad text-[10px] font-bold text-[#1a0a00]">
-                  +
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Clientes */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center">
-              <span className="h-6 w-6 rounded-full border-2 border-bg bg-grad" />
-              <span className="-ml-2 h-6 w-6 rounded-full border-2 border-bg bg-grad" />
-              <span className="-ml-2 h-6 w-6 rounded-full border-2 border-bg bg-grad" />
-            </div>
-            <strong className="text-[clamp(15px,2.5vw,18px)] leading-none">
-              30K+
-            </strong>
-          </div>
-        </div>
-
         {/* Explorar colección — barra negra full-bleed */}
         <Link
           href="/beats"
