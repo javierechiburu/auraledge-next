@@ -30,7 +30,7 @@ export default function BestValue({ product: s }: { product: Product }) {
           {/* Vinilo: ocupa todo el alto de la card y sangra por el borde derecho */}
           <ScrollReveal
             direction="left"
-            distance={-580}
+            distance={-480}
             duration={1.2}
             delay={0.5}
             className="pointer-events-none absolute inset-y-0 right-12 top-10 z-10 hidden aspect-video h-full -translate-y-1/2 translate-x-1/2 md:block"
@@ -41,7 +41,6 @@ export default function BestValue({ product: s }: { product: Product }) {
                 alt={s.name}
                 width={900}
                 height={900}
-                sizes="900px"
                 style={{ animationPlayState: isPlaying ? "running" : "paused" }}
                 className="animate-spin-slow object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,.4)]"
               />

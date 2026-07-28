@@ -112,9 +112,9 @@ export default function IntroOverlay() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={imgRef}
-          src="/assets/logo-bg.png"
+          src="/assets/logo-mark.png"
           alt="GENIOMUSIC"
-          className="h-64 w-64 rounded-full md:h-200 md:w-120"
+          className="h-auto w-[clamp(160px,34vw,320px)] max-h-[70vh] object-contain"
         />
       </div>
 

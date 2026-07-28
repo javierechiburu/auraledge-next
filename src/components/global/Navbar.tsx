@@ -36,11 +36,11 @@ export default function Navbar() {
           className="font-orbitron flex items-center gap-2 text-[16px] font-bold tracking-wide"
         >
           <Image
-            src="/assets/logo-bg.png"
+            src="/assets/logo-mark.png"
             alt="GENIOMUSIC logo"
-            width={28}
+            width={26}
             height={28}
-            className="rounded-full"
+            className="h-7 w-auto object-contain"
           />
           <span>
             GENIO<span className="text-grad">MUSIC</span>
