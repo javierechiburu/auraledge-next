@@ -1,8 +1,17 @@
-import { CartItem, Customer, Order, Product } from "../types";
-import { mockProducts } from "../mock-data";
+import { CartItem, Customer, Menu, Order, Product } from "../types";
+import { mockMenus, mockProducts } from "../mock-data";
 import { DOWNLOAD_URL_TTL, MEDIA_URL_TTL, presignR2 } from "./r2";
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+/** Asegura que la URL base tenga esquema. Si la env viene sin `http(s)://`
+ *  (error típico al pegarla en Netlify/Vercel), le antepone `https://` — así el
+ *  `fetch` no lanza "Invalid URL" ni cae al mock por esa causa. */
+function normalizeBaseUrl(raw?: string): string {
+  if (!raw) return "http://localhost:1337";
+  const trimmed = raw.trim().replace(/\/+$/, "");
+  return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
+
+const STRAPI_URL = normalizeBaseUrl(process.env.NEXT_PUBLIC_STRAPI_URL);
 const TOKEN = process.env.STRAPI_API_TOKEN;
 
 /** Convierte una URL relativa de un asset de Strapi en absoluta. */
@@ -62,8 +71,35 @@ interface StrapiList<T> {
   data: T[];
 }
 
+/** Extrae un array de relación (soporta v4 `{data:[...]}` y v5 array plano). */
+function relArray(rel: unknown): Record<string, unknown>[] {
+  if (!rel) return [];
+  const arr = Array.isArray((rel as { data?: unknown }).data)
+    ? (rel as { data: unknown[] }).data
+    : Array.isArray(rel)
+      ? (rel as unknown[])
+      : [];
+  return arr.map((x) => flatten(x));
+}
+
+/** Extrae una relación simple (soporta v4 `{data:{...}}` y v5 objeto plano). */
+function relSingle(rel: unknown): Record<string, unknown> | null {
+  if (!rel) return null;
+  const obj = (rel as { data?: unknown }).data ?? rel;
+  if (!obj || Array.isArray(obj)) return null;
+  return flatten(obj);
+}
+
 async function mapProduct(raw: Record<string, unknown>): Promise<Product> {
   const p = flatten(raw);
+
+  // El menú del producto se DERIVA de sus subcategorías (cada subcategoría
+  // pertenece a un menú). No hay campo de menú manual: si el producto tiene una
+  // subcategoría asociada al menú "beats", aparece en /c/beats automáticamente.
+  const subs = relArray(p.subcategories);
+  const menuSlugs = Array.from(
+    new Set(subs.map((s) => relSingle(s.menu)?.slug as string).filter(Boolean))
+  );
 
   // Bucket R2 privado: el preview (audio) se firma con URL temporal. Si Strapi
   // sirve desde disco local (dev) o no es R2, presignR2 devuelve la URL tal cual.
@@ -108,23 +144,64 @@ async function mapProduct(raw: Record<string, unknown>): Promise<Product> {
     previewUrl,
     bestValue: Boolean(p.bestValue),
     highlight: Boolean(p.highlight),
+    menuSlugs,
+    subcategorySlugs: subs.map((s) => s.slug as string).filter(Boolean),
+    subcategoryNames: subs.map((s) => s.name as string).filter(Boolean),
   };
 }
 
+const PRODUCT_POPULATE =
+  "populate[previewClip]=true&populate[subcategories][populate][menu]=true";
+
 export async function getProducts(): Promise<Product[]> {
   const json = await strapiFetch<StrapiList<Record<string, unknown>>>(
-    "/products?populate[previewClip]=true&pagination[pageSize]=100"
+    `/products?${PRODUCT_POPULATE}&pagination[pageSize]=100`
   );
   if (!json?.data?.length) return mockProducts;
   return Promise.all(json.data.map(mapProduct));
 }
 
+/** Productos de un menú (por slug del menú). Cae al mock filtrado si no hay Strapi. */
+export async function getProductsByMenu(menuSlug: string): Promise<Product[]> {
+  const json = await strapiFetch<StrapiList<Record<string, unknown>>>(
+    `/products?${PRODUCT_POPULATE}&filters[subcategories][menu][slug][$eq]=${encodeURIComponent(
+      menuSlug
+    )}&pagination[pageSize]=100`
+  );
+  if (json?.data?.length) return Promise.all(json.data.map(mapProduct));
+  return mockProducts.filter((p) => p.menuSlugs.includes(menuSlug));
+}
+
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   const json = await strapiFetch<StrapiList<Record<string, unknown>>>(
-    `/products?filters[slug][$eq]=${encodeURIComponent(slug)}&populate[previewClip]=true`
+    `/products?filters[slug][$eq]=${encodeURIComponent(slug)}&${PRODUCT_POPULATE}`
   );
   if (json?.data?.length) return mapProduct(json.data[0]);
   return mockProducts.find((p) => p.slug === slug) ?? null;
+}
+
+/** Menús del navbar, ordenados, con sus subcategorías. Cae al mock si no hay Strapi. */
+export async function getMenus(): Promise<Menu[]> {
+  const json = await strapiFetch<StrapiList<Record<string, unknown>>>(
+    "/menus?populate[subcategories]=true&sort=order:asc&pagination[pageSize]=50"
+  );
+  if (!json?.data?.length) return mockMenus;
+  return json.data.map((raw) => {
+    const m = flatten(raw);
+    return {
+      id: (m.id as number) ?? 0,
+      name: (m.name as string) ?? "",
+      slug: (m.slug as string) ?? "",
+      order: Number(m.order ?? 0),
+      icon: (m.icon as string) ?? null,
+      subcategories: relArray(m.subcategories).map((s) => ({
+        id: (s.id as number) ?? 0,
+        name: (s.name as string) ?? "",
+        slug: (s.slug as string) ?? "",
+        menuSlug: (m.slug as string) ?? null,
+      })),
+    };
+  });
 }
 
 /**

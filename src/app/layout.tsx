@@ -3,6 +3,7 @@ import { Manrope, Luckiest_Guy, Orbitron } from "next/font/google";
 import localFont from "next/font/local";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { getMenus } from "@/lib/api/strapi";
 import Navbar from "@/components/global/Navbar";
 import CartDrawer from "@/components/global/CartDrawer";
 import AuthModal from "@/components/auth/AuthModal";
@@ -46,11 +47,12 @@ export const metadata: Metadata = {
   description: "Venta de beats premium.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const menus = await getMenus();
   return (
     <html
       lang="en"
@@ -60,7 +62,7 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <IntroOverlay />
-            <Navbar />
+            <Navbar menus={menus} />
             {children}
             <CartDrawer />
             <AuthModal />

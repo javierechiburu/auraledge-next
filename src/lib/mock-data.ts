@@ -1,4 +1,4 @@
-import { Product } from "./types";
+import { Menu, Product } from "./types";
 
 // Datos de respaldo: se usan cuando Strapi no está disponible, de modo que la
 // web funcione en desarrollo sin backend. Los `previewUrl` apuntan a clips de
@@ -25,6 +25,9 @@ export const mockProducts: Product[] = [
     category: "Plantillas mezcla beats",
     bestValue: true,
     highlight: true,
+    menuSlugs: ["beats"],
+    subcategorySlugs: ["trap"],
+    subcategoryNames: ["Trap"],
   },
   {
     id: 2,
@@ -47,6 +50,9 @@ export const mockProducts: Product[] = [
     category: "Plantillas vocales",
     bestValue: true,
     highlight: false,
+    menuSlugs: ["beats"],
+    subcategorySlugs: ["reggaeton"],
+    subcategoryNames: ["Reggaetón"],
   },
   {
     id: 3,
@@ -69,6 +75,9 @@ export const mockProducts: Product[] = [
     category: "Plantillas masterización",
     bestValue: false,
     highlight: false,
+    menuSlugs: ["beats"],
+    subcategorySlugs: ["drill"],
+    subcategoryNames: ["Drill"],
   },
   {
     id: 4,
@@ -91,27 +100,61 @@ export const mockProducts: Product[] = [
     category: "Plantillas mezcla beats",
     bestValue: true,
     highlight: false,
+    menuSlugs: ["beats"],
+    subcategorySlugs: ["trap"],
+    subcategoryNames: ["Trap"],
   },
   {
     id: 5,
-    slug: "rkt-bajo-fuego",
-    name: "RKT Bajo Fuego",
-    subtitle: "RKT/guaracha energético",
+    slug: "pack-vocal-pro",
+    name: "Pack Plantilla Vocal Pro",
+    subtitle: "Plantilla de mezcla vocal (.zip)",
     description:
-      "Base de RKT acelerada con kick guaracha y sintes filosos para prender cualquier fiesta.",
-    price: 10990,
+      "Plantilla lista para mezclar voces: cadena de efectos, presets y sesión de ejemplo. Descarga en .zip.",
+    price: 9990,
     compareAtPrice: null,
-    tag: "Best Seller",
+    tag: "Plantilla",
     badge: null,
-    features: ["Mezcla lista", "WAV + MP3", "Licencia estándar"],
-    genre: "RKT",
-    bpm: 130,
-    musicalKey: "Dm",
-    durationSeconds: 160,
-    previewSeconds: 25,
-    previewUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+    features: [".zip descargable", "Presets incluidos", "Compatible FL/Ableton"],
+    genre: null,
+    bpm: null,
+    musicalKey: null,
+    durationSeconds: null,
+    previewSeconds: null,
+    previewUrl: null,
     category: "Plantillas vocales",
     bestValue: false,
-    highlight: false,
+    highlight: true,
+    menuSlugs: ["plantillas"],
+    subcategorySlugs: ["plantillas-vocales"],
+    subcategoryNames: ["Plantillas vocales"],
+  },
+];
+
+/** Menús de respaldo (fallback del navbar cuando no hay Strapi). */
+export const mockMenus: Menu[] = [
+  {
+    id: 1,
+    name: "Beats",
+    slug: "beats",
+    order: 1,
+    icon: "Disc3",
+    subcategories: [
+      { id: 1, name: "Trap", slug: "trap", menuSlug: "beats" },
+      { id: 2, name: "Reggaetón", slug: "reggaeton", menuSlug: "beats" },
+      { id: 3, name: "Drill", slug: "drill", menuSlug: "beats" },
+    ],
+  },
+  {
+    id: 2,
+    name: "Plantillas",
+    slug: "plantillas",
+    order: 2,
+    icon: "LayoutTemplate",
+    subcategories: [
+      { id: 4, name: "Plantillas vocales", slug: "plantillas-vocales", menuSlug: "plantillas" },
+      { id: 5, name: "Plantillas mezcla beats", slug: "plantillas-mezcla-beats", menuSlug: "plantillas" },
+      { id: 6, name: "Plantillas masterización", slug: "plantillas-masterizacion", menuSlug: "plantillas" },
+    ],
   },
 ];

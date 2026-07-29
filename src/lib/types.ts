@@ -1,3 +1,21 @@
+/** Subcategoría (filtro) asociada a un menú. */
+export interface Subcategory {
+  id: number;
+  name: string;
+  slug: string;
+  menuSlug?: string | null;
+}
+
+/** Menú del navbar (Beats, Plantillas, ...), dinámico desde Strapi. */
+export interface Menu {
+  id: number;
+  name: string;
+  slug: string;
+  order: number;
+  icon?: string | null;
+  subcategories: Subcategory[];
+}
+
 export interface Product {
   id: number;
   documentId?: string;
@@ -29,6 +47,12 @@ export interface Product {
   previewUrl?: string | null;
   bestValue?: boolean;
   highlight?: boolean;
+  /** Slugs de los menús a los que pertenece (un producto puede estar en varios). */
+  menuSlugs: string[];
+  /** Slugs de las subcategorías asignadas (una o varias). */
+  subcategorySlugs: string[];
+  /** Nombres de las subcategorías (para mostrar en la tarjeta/detalle). */
+  subcategoryNames: string[];
 }
 
 export interface CartItem {

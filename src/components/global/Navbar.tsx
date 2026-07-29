@@ -7,21 +7,35 @@ import { usePathname } from "next/navigation";
 import {
   Home,
   Disc3,
+  LayoutTemplate,
+  Music,
+  Package,
+  Tag,
   ShoppingCart,
   User,
   BarChart3,
-  Menu,
+  Menu as MenuIcon,
   X,
+  type LucideIcon,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
+import type { Menu } from "@/lib/types";
 
-const LINKS = [
-  { href: "/#top", label: "Inicio", Icon: Home },
-  { href: "/beats", label: "Beats", Icon: Disc3 },
-];
+/** Mapea el nombre de ícono guardado en Strapi (campo `icon`) a un componente. */
+const ICONS: Record<string, LucideIcon> = {
+  Disc3,
+  LayoutTemplate,
+  Music,
+  Package,
+  Tag,
+};
 
-export default function Navbar() {
+function menuIcon(name?: string | null): LucideIcon {
+  return (name && ICONS[name]) || Disc3;
+}
+
+export default function Navbar({ menus }: { menus: Menu[] }) {
   const { count, openCart } = useCart();
   const { user, loading, openAuth } = useAuth();
   const pathname = usePathname();
@@ -55,11 +69,24 @@ export default function Navbar() {
               : "hidden"
           } lg:flex lg:flex-1 lg:flex-row lg:items-center lg:justify-center lg:gap-1 lg:border-0 lg:bg-transparent lg:p-0`}
         >
-          {LINKS.map(({ href, label, Icon }) => {
-            const active = href === "/beats" && pathname?.startsWith("/beats");
+          {/* Inicio (estático) */}
+          <Link
+            href="/#top"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2 border border-transparent px-4 py-1.5 text-[14.5px] font-medium text-muted transition-colors hover:border-line hover:bg-white/5 hover:text-ink"
+          >
+            <Home size={16} className="text-accent" />
+            Inicio
+          </Link>
+
+          {/* Menús dinámicos desde Strapi */}
+          {menus.map((menu) => {
+            const href = `/c/${menu.slug}`;
+            const active = pathname?.startsWith(href);
+            const Icon = menuIcon(menu.icon);
             return (
               <Link
-                key={href}
+                key={menu.slug}
                 href={href}
                 onClick={() => setOpen(false)}
                 className={`flex items-center gap-2 border border-transparent px-4 py-1.5 text-[14.5px] font-medium transition-colors hover:border-line hover:bg-white/5 hover:text-ink ${
@@ -67,7 +94,7 @@ export default function Navbar() {
                 }`}
               >
                 <Icon size={16} className="text-accent" />
-                {label}
+                {menu.name}
               </Link>
             );
           })}
@@ -128,7 +155,7 @@ export default function Navbar() {
             aria-label="Menú"
             className="grid h-9 w-9 place-items-center border border-line transition-colors hover:bg-white/10 lg:hidden"
           >
-            {open ? <X size={18} /> : <Menu size={18} />}
+            {open ? <X size={18} /> : <MenuIcon size={18} />}
           </button>
         </div>
       </div>
