@@ -45,11 +45,15 @@ async function strapiFetch<T>(path: string): Promise<T | null> {
       headers: TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {},
       // ISR: revalida cada 60s. Cambia a { cache: "no-store" } si quieres siempre fresco.
       next: { revalidate: 60 },
+      // Timeout duro: si Strapi (p. ej. en Railway) tarda durante el build de
+      // Next, se aborta y el llamador cae al mock — evita que la generación
+      // estática se cuelgue >60s y falle el deploy (Netlify/Vercel).
+      signal: AbortSignal.timeout(10000),
     });
     if (!res.ok) return null;
     return (await res.json()) as T;
   } catch {
-    // Strapi no disponible → el llamador usa datos mock.
+    // Strapi no disponible / timeout → el llamador usa datos mock.
     return null;
   }
 }
@@ -68,6 +72,16 @@ async function mapProduct(raw: Record<string, unknown>): Promise<Product> {
     : null;
   const previewUrl = await presignR2(rawPreviewUrl, { expiresIn: MEDIA_URL_TTL });
 
+  // Oferta automatizada: solo se ingresa `discountPercent` (0-100) en Strapi.
+  // `price` es el precio FINAL (lo que se cobra). El "precio anterior" tachado
+  // se DERIVA hacia arriba y se redondea a la decena para que se vea natural.
+  const price = Number(p.price ?? 0);
+  const discountPercent = p.discountPercent != null ? Number(p.discountPercent) : 0;
+  const compareAtPrice =
+    discountPercent > 0 && discountPercent < 100
+      ? Math.round(price / (1 - discountPercent / 100) / 10) * 10
+      : null;
+
   return {
     id: (p.id as number) ?? 0,
     documentId: p.documentId as string | undefined,
@@ -75,8 +89,9 @@ async function mapProduct(raw: Record<string, unknown>): Promise<Product> {
     name: (p.name as string) ?? "",
     subtitle: (p.subtitle as string) ?? "",
     description: (p.description as string) ?? "",
-    price: Number(p.price ?? 0),
-    compareAtPrice: p.compareAtPrice != null ? Number(p.compareAtPrice) : null,
+    price,
+    discountPercent: discountPercent || null,
+    compareAtPrice,
     tag: (p.tag as string) ?? null,
     badge: (p.badge as string) ?? null,
     category: (p.category as string) ?? null,

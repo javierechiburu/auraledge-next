@@ -6,6 +6,9 @@ export interface Product {
   subtitle: string;
   description: string;
   price: number;
+  /** % de descuento (0-100). El precio anterior tachado se deriva de aquí. */
+  discountPercent?: number | null;
+  /** Precio "antes" (tachado). DERIVADO de price + discountPercent en el servidor. */
   compareAtPrice?: number | null;
   tag?: string | null;
   badge?: string | null;

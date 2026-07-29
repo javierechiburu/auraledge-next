@@ -69,6 +69,11 @@ export default function ProductDetail({ product }: { product: Product }) {
               {clp(product.compareAtPrice)}
             </span>
           )}
+          {product.discountPercent ? (
+            <span className="rounded bg-accent/15 px-2 py-1 text-sm font-semibold text-accent">
+              -{product.discountPercent}%
+            </span>
+          ) : null}
         </div>
 
         <div className="flex flex-wrap items-center gap-3">

@@ -119,9 +119,16 @@ export default function ProductCard({ product: p }: { product: Product }) {
         </div>
 
         <div className="flex items-center justify-between">
-          <span className="text-[15px] font-semibold tabular-nums text-ink">
-            {formatCLP(p.price)}
-          </span>
+          <div className="flex items-baseline gap-2">
+            <span className="text-[15px] font-semibold tabular-nums text-ink">
+              {formatCLP(p.price)}
+            </span>
+            {p.compareAtPrice && (
+              <span className="text-xs tabular-nums text-muted line-through">
+                {formatCLP(p.compareAtPrice)}
+              </span>
+            )}
+          </div>
 
           <AddToCartButton
             product={p}
