@@ -9,6 +9,7 @@ import { customerSchema, firstError } from "@/lib/validation";
 import { Customer, MPPreferenceResponse } from "@/lib/types";
 import CartSummary from "@/components/checkout/CartSummary";
 import CheckoutForm from "@/components/checkout/CheckoutForm";
+import CheckoutResult from "@/components/checkout/CheckoutResult";
 import MercadoPagoNotice from "@/components/checkout/MercadoPagoNotice";
 
 export default function CheckoutPage() {
@@ -21,6 +22,17 @@ export default function CheckoutPage() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Retorno de Mercado Pago: undefined = aún no determinado, null = checkout normal.
+  const [result, setResult] = useState<
+    { status: string; orderId: string | null } | null | undefined
+  >(undefined);
+
+  // Detecta el retorno de pago (?status=success|pending|failure&external_reference=...).
+  useEffect(() => {
+    const sp = new URLSearchParams(window.location.search);
+    const status = sp.get("status");
+    setResult(status ? { status, orderId: sp.get("external_reference") } : null);
+  }, []);
 
   // Precompleta el correo con el de la sesión (si el usuario no lo cambió).
   useEffect(() => {
@@ -55,6 +67,15 @@ export default function CheckoutPage() {
       );
       setLoading(false);
     }
+  }
+
+  // Retorno de Mercado Pago: pantalla de agradecimiento/estado (antes que el
+  // check de carrito vacío, porque al volver el carrito ya se vacía).
+  if (result === undefined) {
+    return <main className="min-h-screen bg-bg" />;
+  }
+  if (result) {
+    return <CheckoutResult status={result.status} orderId={result.orderId} />;
   }
 
   if (items.length === 0) {
