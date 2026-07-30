@@ -23,7 +23,7 @@
 /* ===== Design tokens (generan utilidades: bg-bg, text-ink, border-line, etc.) ===== */
 @theme {
   /* Fondo plano casi-negro neutro (dark UI 2026), sin difuminados */
-  --color-bg: oklch(21.8% 0.008 223.9);
+  --color-bg: oklch(14.8% 0.004 228.8);
   --color-card: #101012;
   --color-panel: #0e0e10;
   --color-ink: #ededf0;
