@@ -23,7 +23,7 @@
 /* ===== Design tokens (generan utilidades: bg-bg, text-ink, border-line, etc.) ===== */
 @theme {
   /* Fondo plano casi-negro neutro (dark UI 2026), sin difuminados */
-  --color-bg: #0a0a0b;
+  --color-bg: oklch(21.8% 0.008 223.9);
   --color-card: #101012;
   --color-panel: #0e0e10;
   --color-ink: #ededf0;
@@ -40,7 +40,8 @@
     var(--font-luckiest-guy), var(--font-manrope), system-ui, sans-serif;
   --font-clash:
     var(--font-clash-display), var(--font-manrope), system-ui, sans-serif;
-  --font-orbitron: var(--font-orbitron-src), var(--font-manrope), system-ui, sans-serif;
+  --font-orbitron:
+    var(--font-orbitron-src), var(--font-manrope), system-ui, sans-serif;
 }
 
 @layer base {
@@ -58,7 +59,11 @@
 
 /* ===== Utilidades personalizadas (degradados / superficies) ===== */
 @utility bg-grad {
-  background-image: linear-gradient(135deg, var(--color-brand) 0%, var(--color-amber) 100%);
+  background-image: linear-gradient(
+    135deg,
+    var(--color-brand) 0%,
+    var(--color-amber) 100%
+  );
 }
 @utility text-grad {
   background-image: linear-gradient(135deg, #ff9e2c 0%, #ffd24a 100%);

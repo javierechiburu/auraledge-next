@@ -106,7 +106,7 @@ export default function IntroOverlay() {
   return (
     <div
       ref={overlayRef}
-      className="intro-mask fixed inset-0 z-[200] grid place-items-center bg-black"
+      className="intro-mask fixed inset-0 z-[200] grid place-items-center bg-mist-900"
     >
       <div ref={logoRef} className="flex flex-col items-center gap-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
