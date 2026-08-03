@@ -259,7 +259,7 @@ export async function createOrder(
         ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
       },
       body: JSON.stringify({
-        data: { items, customer, total, status: "pending", ...(userId ? { user: userId } : {}) },
+        data: { items, customer, total, orderStatus: "pending", ...(userId ? { user: userId } : {}) },
       }),
       cache: "no-store",
     });
@@ -302,7 +302,7 @@ export async function getOrder(orderId: string): Promise<Order | null> {
       items: parse<CartItem[]>(o.items) ?? [],
       customer: parse<Customer>(o.customer) ?? { name: "", email: "" },
       total: Number(o.total ?? 0),
-      status: (o.status as Order["status"]) ?? "pending",
+      status: (o.orderStatus as Order["status"]) ?? "pending",
       mpPreferenceId: (o.mpPreferenceId as string) ?? null,
       mpPaymentId: (o.mpPaymentId as string) ?? null,
       fulfilledAt: (o.fulfilledAt as string) ?? null,
@@ -352,13 +352,17 @@ export async function updateOrder(
     return;
   }
   try {
+    // El campo de estado de la orden se llama `orderStatus` en Strapi (evita la
+    // colisión con el `status` reservado de draft/publish de Strapi 5).
+    const { status, ...rest } = patch;
+    const data = { ...rest, ...(status !== undefined ? { orderStatus: status } : {}) };
     await fetch(`${STRAPI_URL}/api/orders/${orderId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
       },
-      body: JSON.stringify({ data: patch }),
+      body: JSON.stringify({ data }),
       cache: "no-store",
     });
   } catch {

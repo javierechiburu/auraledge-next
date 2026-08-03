@@ -29,7 +29,7 @@ export async function GET() {
   const orders: UserOrder[] = (json.data ?? []).map((raw) => {
     const id = String(raw.documentId ?? raw.id ?? "");
     const items = parse<CartItem[]>(raw.items) ?? [];
-    const status = (raw.status as UserOrder["status"]) ?? "pending";
+    const status = (raw.orderStatus as UserOrder["status"]) ?? "pending";
     const order: UserOrder = {
       id,
       documentId: raw.documentId as string | undefined,
