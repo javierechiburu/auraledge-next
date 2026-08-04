@@ -40,9 +40,28 @@ export async function POST(request: NextRequest) {
     secret: process.env.MP_WEBHOOK_SECRET,
   });
 
+  // --- DIAGNÓSTICO temporal de firma (no expone el secreto; quitar después) ---
+  // Se devuelve en la respuesta para poder verlo en el panel de MP (detalle de
+  // la entrega) sin necesidad de los logs de Netlify.
+  const debug = {
+    url: request.url,
+    queryDataId: searchParams.get("data.id"),
+    bodyDataId: body?.data?.id ?? null,
+    dataIdUsed: searchParams.get("data.id") ?? (paymentId != null ? String(paymentId) : null),
+    xSignature: request.headers.get("x-signature"),
+    xRequestId: request.headers.get("x-request-id"),
+    secretSet: Boolean(process.env.MP_WEBHOOK_SECRET),
+    secretLen: (process.env.MP_WEBHOOK_SECRET || "").length,
+    signatureState,
+  };
+  console.log("[webhook-debug] " + JSON.stringify(debug));
+  // --- fin diagnóstico ---
+
   if (signatureState === "invalid") {
     console.warn("[webhooks/mercadopago] Firma inválida — notificación rechazada.");
-    return NextResponse.json({ error: "invalid signature" }, { status: 401 });
+    // Devuelve 200 para que MP muestre el cuerpo de la respuesta con el debug
+    // (con 401 el panel a veces no muestra el body). QUITAR tras diagnosticar.
+    return NextResponse.json({ error: "invalid signature", debug }, { status: 200 });
   }
   if (signatureState === "unconfigured") {
     // Sin secreto configurado: en producción se rechaza; en dev se permite con aviso.
