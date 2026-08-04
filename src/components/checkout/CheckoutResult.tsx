@@ -30,9 +30,11 @@ const MAX_ATTEMPTS = 20; // ~40s esperando la confirmación del webhook
 export default function CheckoutResult({
   status,
   orderId,
+  paymentId,
 }: {
   status: string;
   orderId: string | null;
+  paymentId: string | null;
 }) {
   const { clear } = useCart();
   const [view, setView] = useState<View>(
@@ -72,7 +74,8 @@ export default function CheckoutResult({
       attempts += 1;
       try {
         const res = await fetch(
-          `/api/orders/${encodeURIComponent(orderId!)}/downloads`,
+          `/api/orders/${encodeURIComponent(orderId!)}/downloads` +
+            (paymentId ? `?payment_id=${encodeURIComponent(paymentId)}` : ""),
           { cache: "no-store" },
         );
         const data = (await res.json()) as {

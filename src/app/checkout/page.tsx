@@ -24,14 +24,24 @@ export default function CheckoutPage() {
   const [error, setError] = useState<string | null>(null);
   // Retorno de Mercado Pago: undefined = aún no determinado, null = checkout normal.
   const [result, setResult] = useState<
-    { status: string; orderId: string | null } | null | undefined
+    | { status: string; orderId: string | null; paymentId: string | null }
+    | null
+    | undefined
   >(undefined);
 
-  // Detecta el retorno de pago (?status=success|pending|failure&external_reference=...).
+  // Detecta el retorno de pago (?status=success&external_reference=...&payment_id=...).
   useEffect(() => {
     const sp = new URLSearchParams(window.location.search);
     const status = sp.get("status");
-    setResult(status ? { status, orderId: sp.get("external_reference") } : null);
+    setResult(
+      status
+        ? {
+            status,
+            orderId: sp.get("external_reference"),
+            paymentId: sp.get("payment_id") ?? sp.get("collection_id"),
+          }
+        : null
+    );
   }, []);
 
   // Precompleta el correo con el de la sesión (si el usuario no lo cambió).
@@ -75,7 +85,13 @@ export default function CheckoutPage() {
     return <main className="min-h-screen bg-bg" />;
   }
   if (result) {
-    return <CheckoutResult status={result.status} orderId={result.orderId} />;
+    return (
+      <CheckoutResult
+        status={result.status}
+        orderId={result.orderId}
+        paymentId={result.paymentId}
+      />
+    );
   }
 
   if (items.length === 0) {
