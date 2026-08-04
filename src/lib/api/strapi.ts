@@ -324,6 +324,22 @@ export interface FullTrackFile {
  * token del servidor. El campo `fullTrack` es privado en Strapi, por lo que solo
  * es accesible con credenciales de servidor — nunca se expone al navegador.
  */
+/** DEBUG temporal: por qué getTrackFullFile no encuentra el fullTrack. */
+export async function debugFullTrack(slug: string): Promise<Record<string, unknown>> {
+  const json = await strapiFetch<StrapiList<Record<string, unknown>>>(
+    `/products?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=fullTrack`
+  );
+  const raw = json?.data?.[0];
+  const p = raw ? flatten(raw) : null;
+  return {
+    slug,
+    productFound: Boolean(raw),
+    productKeys: p ? Object.keys(p) : [],
+    fullTrackValue: p ? (p.fullTrack ?? null) : null,
+    tokenSet: Boolean(process.env.STRAPI_API_TOKEN),
+  };
+}
+
 export async function getTrackFullFile(slug: string): Promise<FullTrackFile | null> {
   const json = await strapiFetch<StrapiList<Record<string, unknown>>>(
     `/products?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=fullTrack`

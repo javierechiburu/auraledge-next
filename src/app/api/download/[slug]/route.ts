@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyDownloadToken } from "@/lib/api/download-token";
-import { getOrder, getTrackFullFile } from "@/lib/api/strapi";
+import { getOrder, getTrackFullFile, debugFullTrack } from "@/lib/api/strapi";
 import { DOWNLOAD_URL_TTL, presignR2 } from "@/lib/api/r2";
 
 /**
@@ -43,7 +43,9 @@ export async function GET(
 
   const file = await getTrackFullFile(slug);
   if (!file) {
-    return NextResponse.json({ error: "Archivo no disponible." }, { status: 404 });
+    // DEBUG temporal: por qué no se encuentra el fullTrack. QUITAR después.
+    const debug = await debugFullTrack(slug);
+    return NextResponse.json({ error: "Archivo no disponible.", debug }, { status: 404 });
   }
 
   // Bucket R2 privado: firmamos una URL de corta duración (5 min) para poder
