@@ -13,6 +13,12 @@ const STATUS_MAP: Record<string, OrderStatus> = {
   in_process: "pending",
 };
 
+// DIAGNÓSTICO temporal (QUITAR después): guarda el resultado de la última
+// notificación procesada para poder leerlo con GET sin acceder a los logs. En
+// serverless puede perderse si la lambda se recicla, pero suele sobrevivir unos
+// minutos en instancias "calientes" — suficiente para inspeccionar tras un pago.
+let lastWebhookRun: Record<string, unknown> | null = null;
+
 /**
  * Notificación de pago de Mercado Pago (configurar como notification_url).
  * Docs: https://www.mercadopago.com/developers/es/docs/checkout-pro/additional-content/notifications/webhooks
@@ -46,6 +52,7 @@ export async function GET() {
     },
     resendApiKey: { set: Boolean(process.env.RESEND_API_KEY) },
     siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? null,
+    lastWebhookRun,
   });
 }
 
@@ -67,7 +74,8 @@ export async function POST(request: NextRequest) {
   // --- DIAGNÓSTICO temporal de firma (no expone el secreto; quitar después) ---
   // Se devuelve en la respuesta para poder verlo en el panel de MP (detalle de
   // la entrega) sin necesidad de los logs de Netlify.
-  const debug = {
+  const debug: Record<string, unknown> = {
+    at: new Date().toISOString(),
     url: request.url,
     queryDataId: searchParams.get("data.id"),
     bodyDataId: body?.data?.id ?? null,
@@ -77,12 +85,15 @@ export async function POST(request: NextRequest) {
     secretSet: Boolean(process.env.MP_WEBHOOK_SECRET),
     secretLen: (process.env.MP_WEBHOOK_SECRET || "").length,
     signatureState,
+    outcome: "started",
   };
+  lastWebhookRun = debug; // se muta debajo; GET lee el estado final por referencia.
   console.log("[webhook-debug] " + JSON.stringify(debug));
   // --- fin diagnóstico ---
 
   if (signatureState === "invalid") {
     console.warn("[webhooks/mercadopago] Firma inválida — notificación rechazada.");
+    debug.outcome = "rejected_invalid_signature";
     // Devuelve 200 para que MP muestre el cuerpo de la respuesta con el debug
     // (con 401 el panel a veces no muestra el body). QUITAR tras diagnosticar.
     return NextResponse.json({ error: "invalid signature", debug }, { status: 200 });
@@ -99,6 +110,7 @@ export async function POST(request: NextRequest) {
   }
 
   if (type !== "payment" || !paymentId) {
+    debug.outcome = "ignored_non_payment";
     return NextResponse.json({ received: true });
   }
 
@@ -106,6 +118,9 @@ export async function POST(request: NextRequest) {
     const payment = await getPayment(String(paymentId));
     const orderId = payment.external_reference;
     const status = STATUS_MAP[payment.status ?? "pending"] ?? "pending";
+    debug.paymentStatus = payment.status ?? null;
+    debug.mappedStatus = status;
+    debug.orderId = orderId ?? null;
 
     if (orderId) {
       // Captura de comisión de MP para reportar bruto vs neto.
@@ -129,12 +144,23 @@ export async function POST(request: NextRequest) {
       // Entrega digital idempotente: solo si aprobado y no entregado aún.
       if (status === "approved") {
         const order = await getOrder(orderId);
+        debug.orderFound = Boolean(order);
+        debug.alreadyFulfilled = Boolean(order?.fulfilledAt);
         if (order && !order.fulfilledAt) {
           await fulfillOrder(order);
+          debug.outcome = "fulfilled";
+        } else {
+          debug.outcome = order ? "skipped_already_fulfilled" : "order_not_found";
         }
+      } else {
+        debug.outcome = "not_approved";
       }
+    } else {
+      debug.outcome = "no_external_reference";
     }
   } catch (err) {
+    debug.outcome = "error";
+    debug.error = (err as Error).message;
     console.error("[webhooks/mercadopago] Error procesando notificación:", err);
   }
 
