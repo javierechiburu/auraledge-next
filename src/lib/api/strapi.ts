@@ -298,7 +298,10 @@ export async function getOrder(orderId: string): Promise<Order | null> {
     const parse = <T>(v: unknown): T =>
       typeof v === "string" ? (JSON.parse(v) as T) : (v as T);
     return {
-      id: String(o.id ?? o.documentId ?? orderId),
+      // Strapi 5 identifica los recursos REST por documentId (getOrder/updateOrder
+      // consultan /api/orders/{documentId}). Debe primar sobre el id numérico para
+      // que los tokens de descarga (fulfillOrder) apunten a un recurso resoluble.
+      id: String(o.documentId ?? o.id ?? orderId),
       items: parse<CartItem[]>(o.items) ?? [],
       customer: parse<Customer>(o.customer) ?? { name: "", email: "" },
       total: Number(o.total ?? 0),
