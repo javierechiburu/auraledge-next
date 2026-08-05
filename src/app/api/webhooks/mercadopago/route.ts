@@ -25,6 +25,30 @@ const STATUS_MAP: Record<string, OrderStatus> = {
  *  3. La entrega digital (correo con link firmado) se dispara SOLO cuando el
  *     pago está aprobado y la orden no había sido entregada antes (idempotente).
  */
+/**
+ * DIAGNÓSTICO temporal (QUITAR después). Abre esta URL en el navegador
+ * (GET https://geniomusic.com/api/webhooks/mercadopago) para confirmar qué
+ * variables de entorno llegaron al deploy, SIN exponer sus valores. Sirve para
+ * distinguir "variable ausente" de "valor incorrecto" sin acceder a los logs.
+ */
+export async function GET() {
+  return NextResponse.json({
+    diag: "webhook-config",
+    nodeEnv: process.env.NODE_ENV ?? null,
+    mpWebhookSecret: {
+      set: Boolean(process.env.MP_WEBHOOK_SECRET),
+      len: (process.env.MP_WEBHOOK_SECRET || "").length,
+    },
+    mpAccessToken: {
+      set: Boolean(process.env.MP_ACCESS_TOKEN),
+      // Los tokens de prueba empiezan por TEST-, los de prod por APP_USR-.
+      prefix: (process.env.MP_ACCESS_TOKEN || "").slice(0, 5) || null,
+    },
+    resendApiKey: { set: Boolean(process.env.RESEND_API_KEY) },
+    siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? null,
+  });
+}
+
 export async function POST(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const body = await request.json().catch(() => null);
