@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
 
   if (type !== "payment" || !paymentId) {
     debug.outcome = "ignored_non_payment";
-    return NextResponse.json({ received: true });
+    return NextResponse.json({ received: true, debug });
   }
 
   try {
@@ -164,5 +164,5 @@ export async function POST(request: NextRequest) {
     console.error("[webhooks/mercadopago] Error procesando notificación:", err);
   }
 
-  return NextResponse.json({ received: true });
+  return NextResponse.json({ received: true, debug });
 }
